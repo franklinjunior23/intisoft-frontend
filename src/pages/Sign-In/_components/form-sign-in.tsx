@@ -10,9 +10,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { sign } from '@/types/sign'
+import { data, ErrorAxios, sign } from '@/types/sign'
 import { useMutation } from '@tanstack/react-query'
 import { SignIn } from '../action/sign-in.service'
+import { toast } from 'sonner'
+import { UseAuth } from '@/providers/auth.provider'
 
 const shemaSign = z.object({
     user: z
@@ -30,15 +32,17 @@ const shemaSign = z.object({
 })
 
 export function FormSign() {
+    const Sign = UseAuth()?.login
     const mutateSign = useMutation({
         mutationKey: ['sigin'],
         mutationFn: async (data: sign) => SignIn(data),
-        onSuccess: (data) => {
-            console.log(data)
+        onSuccess: (data: data) => {
+            if (!data.token) return toast.error('Error al iniciar sesion')
+            if (Sign) Sign(data)
             console.log('success')
         },
-        onError: (err) => {
-            console.log(err)
+        onError: (err: ErrorAxios) => {
+            console.log(err?.response?.data)
 
             console.log('error')
         },

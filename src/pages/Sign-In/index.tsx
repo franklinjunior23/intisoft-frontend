@@ -1,7 +1,7 @@
-import { FormSign } from './_components/form-sign-in'
+import { FormSign } from '../../pages/Sign-In/_components/form-sign-in'
 import { Codesandbox } from 'lucide-react'
 
-function SignIn() {
+export default function SignIn() {
     return (
         <main className="w-screen h-screen bg-slate-50/50 grid md:grid-cols-2">
             <main className="p-8 bg-black/90 min-h-full">
@@ -45,5 +45,3 @@ function SignIn() {
         </main>
     )
 }
-
-export default SignIn

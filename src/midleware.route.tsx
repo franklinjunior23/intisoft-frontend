@@ -1,17 +1,31 @@
-import { Route, Routes } from 'react-router-dom'
-import SignIn from './routes/sign-in/page'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { UseAuth } from './providers/auth.provider'
 import { ROLE } from './types/role'
+import SignIn from './pages/Sign-In'
+import Default from './layaout/defaullt'
+import PageHome from './pages/home'
 
 export function MidlewareRoute() {
-    const role = 'ee'
+    const profile = UseAuth()?.profile
 
     return (
         <Routes>
-            {role === ROLE.ADMIN ? (
-                <Route path="/" element={<>tENES ADMIN PA</>} />
+            {profile?.role === ROLE.CLIENTE ? (
+                <Route element={<Default />}>
+                    <Route path="/" element={<PageHome />} />
+                </Route>
             ) : (
-                <Route path="/" element={<SignIn />} />
+                <>
+                    <Route path="/" element={<SignIn />} />
+                    <Route
+                        path="*"
+                        element={
+                            <>
+                                <Navigate to="/" />
+                            </>
+                        }
+                    />
+                </>
             )}
         </Routes>
     )

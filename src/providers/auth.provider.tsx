@@ -1,39 +1,69 @@
-import { ROLE } from '@/types/role'
-import { createContext, useContext } from 'react'
+import { InstanceAxios } from '@/helper/axios-config'
+import { data, user } from '@/types/sign'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export type contextAuth = {
-    user: {
-        Name: string
-        Role: ROLE
-    }
-    tokem: string
-    login: (user: string, password: string) => void
+    profile: user | null
+    token: string | null
+    login: (data: data) => void
     logout: () => void
 }
 
-const ContextAuth = createContext<contextAuth | null>(null)
+const ContextAuth = createContext<contextAuth>({} as contextAuth)
 
 export function UseAuth() {
     return useContext(ContextAuth)
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const user = {
-        Name: 'User',
-        Role: ROLE.ADMIN,
-    }
-    const tokem = '123456'
+    const [User, setUser] = useState<user | null>(null)
+    const [token, setToken] = useState<string | null>(null)
 
-    function login(user: string, password: string) {
-        console.log(user, password)
+    const isLoged = localStorage.getItem('isLoged') ?? null
+
+    async function refrehs() {
+        const { data } = await InstanceAxios.post('auth/refresh-token')
+        if (data?.success === false) {
+            return localStorage.removeItem('isLoged')
+        }
+        setUser({
+            name: data.profile.name,
+            lastName: data.profile.lastName,
+            role: data.profile.role,
+        })
+        setToken(data.token)
     }
 
-    function logout() {
-        console.log('logout')
+    useEffect(() => {
+        if (isLoged) {
+            refrehs()
+        }
+    }, [])
+
+    function login(data: data) {
+        localStorage.setItem('isLoged', 'true')
+        toast.success(
+            `Bienvenido ${data.profile.name} ${data.profile.lastName}`
+        )
+        setUser({
+            name: data.profile.name,
+            lastName: data.profile.lastName,
+            role: data.profile.role,
+        })
+        setToken(data.token)
+    }
+
+    async function logout() {
+        await InstanceAxios.post('auth/logout')
+        toast.success(`Sesion cerrada ${User?.name}`)
+        localStorage.removeItem('isLoged')
+        setUser(null)
+        setToken(null)
     }
 
     return (
-        <ContextAuth.Provider value={{ user, tokem, login, logout }}>
+        <ContextAuth.Provider value={{ profile: User, token, login, logout }}>
             {children}
         </ContextAuth.Provider>
     )

@@ -68,6 +68,7 @@
 
 @layer base {
     * {
+        font-family: 'Inter Variable', sans-serif;
         @apply border-border;
     }
     body {
