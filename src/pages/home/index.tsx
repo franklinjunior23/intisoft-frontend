@@ -1,5 +1,11 @@
+import { CompanySlider } from './_components/companies-slider'
+
 function PageHome() {
-    return <div>PageHome</div>
+    return (
+        <div>
+            <CompanySlider />
+        </div>
+    )
 }
 
 export default PageHome
