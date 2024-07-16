@@ -17,7 +17,11 @@ export function UseAuth() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [User, setUser] = useState<user | null>(null)
+    const [User, setUser] = useState<user | null>(() =>
+        localStorage.getItem('profile')
+            ? JSON.parse(localStorage.getItem('profile') as string)
+            : null
+    )
     const [token, setToken] = useState<string | null>(null)
 
     const isLoged = localStorage.getItem('isLoged') ?? null
@@ -27,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (data?.success === false) {
             return localStorage.removeItem('isLoged')
         }
+
         setUser({
             name: data.profile.name,
             lastName: data.profile.lastName,
@@ -46,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         toast.success(
             `Bienvenido ${data.profile.name} ${data.profile.lastName}`
         )
+        localStorage.setItem('profile', JSON.stringify(data.profile))
         setUser({
             name: data.profile.name,
             lastName: data.profile.lastName,

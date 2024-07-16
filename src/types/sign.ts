@@ -17,6 +17,7 @@ export interface user {
     name: string
     lastName: string
     role: ROLE
+    company?: string
 }
 export interface data {
     profile: user
