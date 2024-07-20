@@ -1,65 +1,87 @@
-import React, { useRef, useState } from 'react'
-import { Button, Divider, Input, Select, Space } from 'antd'
-import type { InputRef } from 'antd'
-import { ChevronUp } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
+import { Button } from './button'
+import { Input } from './input'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from './select'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
-let index = 0
-
-interface AppProps {
-    State: string[]
-    setState: React.Dispatch<React.SetStateAction<string[]>>
-    
+interface InputDinamicProps {
+    data: string[]
+    onChange: (value: string) => void
+    value?: string | undefined
 }
 
-const InputSearch = ({ State, setState }: AppProps) => {
-    const [items, setItems] = useState(State)
-    const [name, setName] = useState('')
-    const inputRef = useRef<InputRef>(null)
+export default function InputDinamic({
+    data,
+    value,
+    onChange,
+}: InputDinamicProps) {
+    const [dataField, setDataField] = useState<string[]>([])
+    const [valueField, setValueField] = useState<string | undefined>(value)
+    const [inputValue, setInputValue] = useState<string>('')
 
-    const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value)
+    useEffect(() => {
+        if (data) setDataField(data)
+    }, [data])
+
+    useEffect(() => {
+        setValueField(value)
+        
+        if (value && !dataField.includes(value)) {
+            setDataField((prev) => [...prev, value])
+        }
+    }, [value, dataField])
+
+    function addFieldData(newField: string) {
+        if (newField === '') {
+            return toast.error('El campo no puede estar vacio')
+        }
+        setDataField([...dataField, newField])
+        setInputValue('')
     }
 
-    const addItem = (
-        e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
-    ) => {
-        e.preventDefault()
-        setItems([...items, name || `New item ${index++}`])
-        setName('')
-        setTimeout(() => {
-            inputRef.current?.focus()
-        }, 0)
+    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'Enter') {
+            addFieldData(inputValue)
+        }
     }
 
     return (
-        <Select
-            style={{ width: 300 }}
-            placeholder="custom dropdown render"
-            dropdownRender={(menu) => (
-                <>
-                    {menu}
-                    <Divider style={{ margin: '8px 0' }} />
-                    <Space style={{ padding: '0 8px 4px' }}>
+        <>
+            <Select onValueChange={onChange} value={value}>
+                <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar el estado del usuario" />
+                </SelectTrigger>
+                <SelectContent className="w-[300px]" align="start">
+                    {dataField.map((item, index) => (
+                        <SelectItem key={index} value={item}>
+                            {item}
+                        </SelectItem>
+                    ))}
+                    <div className="flex w-[290px] gap-2 mt-3">
                         <Input
-                            placeholder="Please enter item"
-                            ref={inputRef}
-                            value={name}
-                            onChange={onNameChange}
-                            onKeyDown={(e) => e.stopPropagation()}
+                            placeholder="Buscar"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={handleKeyDown}
                         />
                         <Button
-                            type="text"
-                            icon={<ChevronUp className="w-4 h-4" />}
-                            onClick={addItem}
+                            size="icon"
+                            type="button"
+                            className="px-2"
+                            onClick={() => addFieldData(inputValue)}
                         >
-                            Add item
+                            <PlusIcon className="size-4" />
                         </Button>
-                    </Space>
-                </>
-            )}
-            options={items.map((item) => ({ label: item, value: item }))}
-        />
+                    </div>
+                </SelectContent>
+            </Select>
+        </>
     )
 }
-
-export default InputSearch

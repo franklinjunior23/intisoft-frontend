@@ -1,0 +1,1 @@
+export const TYPEACCOUNT=['IMAP','POP','SMTP','GMAIL']

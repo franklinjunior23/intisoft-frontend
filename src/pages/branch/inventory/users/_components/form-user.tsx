@@ -1,5 +1,5 @@
-import { useFieldArray, useForm } from 'react-hook-form'
-import { typedocument, user } from '@/types/users'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { StatusUser, typedocument, user } from '@/types/users'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -20,8 +20,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import InputSearch from '@/components/ui/input-search'
-import { useState } from 'react'
+import InputDinamic from '@/components/ui/input-search'
+import { TYPEACCOUNT } from '../data/data.user'
 
 const shema = z.object({
     name: z.string(),
@@ -37,9 +37,11 @@ const shema = z.object({
         .optional(),
     post: z.string().optional(),
     document: z.object({ type: z.string(), number: z.string() }),
-    gender: z.enum(['masculino', 'femenino']).transform((val) => {
-        return val === 'masculino'
-    }),
+    gender: z.boolean(
+        z.enum(['masculino', 'femenino']).transform((val) => {
+            val === 'masculino' ? true : false
+        })
+    ),
     status: z.string(),
     area: z.object({ id: z.string(), name: z.string() }),
     device: z
@@ -53,7 +55,7 @@ const shema = z.object({
 })
 
 export function FormUser({ data }: { data: user }) {
-    const [dataCargo, setdataCargo] = useState<string[]>(['Cargo 1', 'Cargo 2'])
+    const status = Object.values(StatusUser)
     const formd = useForm<z.infer<typeof shema>>({
         resolver: zodResolver(shema),
         defaultValues: data as z.infer<typeof shema>,
@@ -196,19 +198,17 @@ export function FormUser({ data }: { data: user }) {
                     <div>
                         {FieldEmail.fields.map((item, index) => (
                             <div key={item.id}>
-                                <FormField
+                                <Controller
                                     control={formd.control}
                                     name={`email.${index}.type`}
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Tipo</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Tipo"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-
+                                            <InputDinamic
+                                                data={TYPEACCOUNT}
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                            />
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -218,7 +218,7 @@ export function FormUser({ data }: { data: user }) {
                                     name={`email.${index}.direction`}
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Email</FormLabel>
+                                            <FormLabel>Dirreción</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="Email"
@@ -247,12 +247,101 @@ export function FormUser({ data }: { data: user }) {
                                         </FormItem>
                                     )}
                                 />
+                                <Button
+                                    type="button"
+                                    onClick={() => FieldEmail.remove(index)}
+                                >
+                                    Eliminar
+                                </Button>
                             </div>
                         ))}
+
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                FieldEmail.append({
+                                    type: '',
+                                    direction: '',
+                                    password: '',
+                                })
+                            }}
+                        >
+                            Agregar
+                        </Button>
                     </div>
                 </div>
+                <div>
+                    <FormField
+                        control={formd.control}
+                        name="status"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Estado</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccionar el estado del usuario" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {status.map((item) => (
+                                            <SelectItem key={item} value={item}>
+                                                {item}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    {/* <FormField
+                        control={formd.control}
+                        name="area.name"
+                        render={({ field }) => {
+                            
+                            return (
+                                <FormItem>
+                                    <FormLabel>Area</FormLabel>
+                                    <InputDinamic data={dataCargo} {...field} />
+                                    <FormMessage />
+                                </FormItem>
+                            )
+                        }}
+                    /> */}
+                    {/* <FormField
+                        control={formd.control}
+                        name="area"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Area</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccionar el estado del usuario" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {status.map((item) => (
+                                            <SelectItem key={item} value={item}>
+                                                {item}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    /> */}
+                </div>
 
-                <Button type="submit">Guardar</Button>
+                <Button type="submit">Enviar</Button>
             </form>
         </Form>
     )
