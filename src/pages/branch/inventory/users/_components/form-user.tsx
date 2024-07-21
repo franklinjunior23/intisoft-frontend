@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -21,7 +20,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import InputDinamic from '@/components/ui/input-search'
-import { TYPEACCOUNT } from '../data/data.user'
+import { TYPEACCOUNT, TYPEPOST } from '../data/data.user'
+import { useEffect } from 'react'
 
 const shema = z.object({
     name: z.string(),
@@ -39,7 +39,7 @@ const shema = z.object({
     document: z.object({ type: z.string(), number: z.string() }),
     gender: z.boolean(
         z.enum(['masculino', 'femenino']).transform((val) => {
-            val === 'masculino' ? true : false
+            return val === 'masculino' ? true : false
         })
     ),
     status: z.string(),
@@ -54,12 +54,13 @@ const shema = z.object({
         .optional(),
 })
 
-export function FormUser({ data }: { data: user }) {
-    const status = Object.values(StatusUser)
+export function FormUser({ data }: { data: user | null }) {
     const formd = useForm<z.infer<typeof shema>>({
         resolver: zodResolver(shema),
-        defaultValues: data as z.infer<typeof shema>,
     })
+
+    const status = Object.values(StatusUser)
+
     const fieldDoc = Object.values(typedocument)
 
     const FieldEmail = useFieldArray({
@@ -67,14 +68,14 @@ export function FormUser({ data }: { data: user }) {
         name: 'email',
     })
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: unknown) => {
         console.log(data)
     }
 
     return (
         <Form {...formd}>
             <form onSubmit={formd.handleSubmit(onSubmit)}>
-                <div className="grid grid-cols-2 gap-3 ">
+                <main className="grid md:grid-cols-3 gap-x-3 gap-y-1">
                     <FormField
                         control={formd.control}
                         name="name"
@@ -103,59 +104,64 @@ export function FormUser({ data }: { data: user }) {
                             </FormItem>
                         )}
                     />
-                </div>
-                <div className="grid grid-cols-2 gap-3 ">
-                    <FormField
+                    <Controller
                         control={formd.control}
-                        name="document.type"
+                        name={`post`}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Tipo de doc.</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Seleccionar el tipo de documento" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {fieldDoc.map((item) => (
-                                            <SelectItem key={item} value={item}>
-                                                {item}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={formd.control}
-                        name="document.number"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Numero</FormLabel>
+                                <FormLabel>Cargo</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Nombre" {...field} />
+                                    <InputDinamic
+                                        data={TYPEPOST}
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                    />
                                 </FormControl>
 
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                </div>
-                <div className="grid grid-cols-2 gap-3 ">
                     <FormField
                         control={formd.control}
-                        name="post"
+                        name="document.type"
+                        render={({ field }) => {
+                            return (
+                                <FormItem>
+                                    <FormLabel>Tipo de doc.</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccionar el tipo de documento" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {fieldDoc.map((item) => (
+                                                <SelectItem
+                                                    key={item}
+                                                    value={item}
+                                                >
+                                                    {item}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )
+                        }}
+                    />
+                    <FormField
+                        control={formd.control}
+                        name="document.number"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Cargo</FormLabel>
+                                <FormLabel>Numero de doc</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Cargo" {...field} />
+                                    <Input placeholder="Nombre" {...field} />
                                 </FormControl>
 
                                 <FormMessage />
@@ -192,7 +198,9 @@ export function FormUser({ data }: { data: user }) {
                             </FormItem>
                         )}
                     />
-                </div>
+                </main>
+
+                <div className="grid grid-cols-2 gap-3 "></div>
                 <div>
                     <h3>Email</h3>
                     <div>
@@ -204,11 +212,13 @@ export function FormUser({ data }: { data: user }) {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Tipo</FormLabel>
-                                            <InputDinamic
-                                                data={TYPEACCOUNT}
-                                                value={field.value}
-                                                onChange={field.onChange}
-                                            />
+                                            <FormControl>
+                                                <InputDinamic
+                                                    data={TYPEACCOUNT}
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                />
+                                            </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}

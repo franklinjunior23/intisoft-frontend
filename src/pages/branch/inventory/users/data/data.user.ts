@@ -1,1 +1,22 @@
-export const TYPEACCOUNT=['IMAP','POP','SMTP','GMAIL']
+export const TYPEACCOUNT = ['IMAP', 'POP', 'SMTP', 'GMAIL']
+export const TYPEPOST = [
+    'Recursos Humanos',
+    'Administrativo',
+    'Financiero',
+    'Comercial',
+    'Operativo',
+    'Tecnico',
+    'Logistica',
+    'Compras',
+    'Ventas',
+    'Marketing',
+    'RRSS',
+    'Atencion al Cliente',
+    'Calidad',
+    'Ingenieria',
+    'Produccion',
+    'IT',
+    'Legal',
+    'Direccion',
+    'Gerencia',
+]

@@ -32,8 +32,10 @@ export default function InputDinamic({
 
     useEffect(() => {
         setValueField(value)
+
+        const exist = dataField.filter((item) => item === value)
         
-        if (value && !dataField.includes(value)) {
+        if (value && exist.length === 0) {
             setDataField((prev) => [...prev, value])
         }
     }, [value, dataField])
@@ -64,7 +66,7 @@ export default function InputDinamic({
                             {item}
                         </SelectItem>
                     ))}
-                    <div className="flex w-[290px] gap-2 mt-3">
+                    <div className="flex w-[290px] gap-2 mt-3 sticky top-0 left-0">
                         <Input
                             placeholder="Buscar"
                             value={inputValue}
