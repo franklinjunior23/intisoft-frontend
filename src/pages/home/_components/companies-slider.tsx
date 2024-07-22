@@ -1,54 +1,116 @@
 import {
     Carousel,
     CarouselContent,
-    CarouselItem,
     CarouselNext,
     CarouselPrevious,
 } from '@/components/ui/carousel'
-import { Time_year } from '@/helper/time/transform-date'
-import { Link } from 'react-router-dom'
 import { GetCompanies } from '../action/company.service'
-import { LocalStorageKeys } from '@/constants/localstorage-keys'
+import { Badge } from '@/components/ui/badge'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { Input } from '@/components/ui/input'
+import { useState } from 'react'
+import ItemCompany from './item-companie'
+import { Button } from '@/components/ui/button'
+import { X, XCircle } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function CompanySlider() {
-    const { isLoading, data } = GetCompanies()
-    if (isLoading) return <div>loading...</div>
+    const [filterCompany, setfilterCompany] = useState<string>('')
+    const { isLoading, data, isError } = GetCompanies()
+
+    function onchangeCompani(e: React.ChangeEvent<HTMLInputElement>) {
+        setfilterCompany(e.target.value)
+    }
+
+    if (isLoading)
+        return (
+            <div className="">
+                <header className="flex justify-between items-end">
+                    <Skeleton className="w-[200px] h-8" />
+                    <Skeleton className="w-[90px] h-4" />
+                </header>
+                <main className='mt-4'>
+                    <Carousel>
+                        <CarouselContent className="gap-3 sm:px-4 h-[150px]">
+                            <Skeleton className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]" />
+                            <Skeleton className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]" />
+                            <Skeleton className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]" />
+                            <Skeleton className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]" />
+                        </CarouselContent>
+                        <CarouselPrevious className="md:left-0 invisible md:visible" />
+                        <CarouselNext className="md:right-0 invisible md:visible" />
+                    </Carousel>
+                </main>
+            </div>
+        )
+    if (isError) return <div>Error</div>
 
     return (
         <div>
+            <header className="mb-4 flex  flex-col-reverse md:flex-row justify-start  items-start md:items-center md:justify-between w-full gap-2" >
+                <div className="flex items-center gap-2 w-full md:w-fit">
+                    <Input
+                        className=" w-[100%] md:max-w-[200px]"
+                        placeholder="Buscar Empresa"
+                        value={filterCompany}
+                        onChange={onchangeCompani}
+                    />
+                    {filterCompany !== '' && (
+                        <Button
+                            variant={'destructive'}
+                            size={'icon'}
+                            onClick={() => setfilterCompany('')}
+                        >
+                            <XCircle className="w-5 h-5" />
+                        </Button>
+                    )}
+                </div>
+                <Badge  >
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                Empresas: {data?.meta.quantity}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Empresas: {data?.meta.quantity}
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </Badge>
+            </header>
             <article>
                 <Carousel>
                     <CarouselContent className="gap-3 sm:px-4 h-[150px]">
-                        {data?.data.map((company) => (
-                            <CarouselItem
-                                key={company.id}
-                                className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]"
-                            >
-                                <div className=" p-4 rounded-xl bg-slate-400 h-full">
-                                    <Link
-                                        to={company.name}
-                                        onClick={() => {
-                                            localStorage.setItem(
-                                                LocalStorageKeys.company,
-                                                company.id
-                                            )
-                                        }}
-                                    >
-                                        <h1 className="text-xl">
-                                            {company.name}
-                                        </h1>
-                                    </Link>
-                                    <span>{company.businessName}</span>
-                                    <p>{company.place}</p>
-                                    <p>
-                                        created : {Time_year(company.createdAt)}
-                                    </p>
-                                </div>
-                            </CarouselItem>
-                        ))}
+                        {filterCompany === '' &&
+                            data?.data.map((company) => (
+                                <ItemCompany key={company.id} {...company} />
+                            ))}
+                        {filterCompany !== '' &&
+                            data?.data
+                                .filter((company) =>
+                                    company.name
+                                        .toLowerCase()
+                                        .includes(filterCompany.toLowerCase())
+                                )
+                                .map((company) => (
+                                    <ItemCompany
+                                        key={company.id}
+                                        {...company}
+                                    />
+                                ))}
+                        {data?.data.length === 0 && (
+                            <div className="text-center">
+                                No se encontraron empresas
+                            </div>
+                        )}
                     </CarouselContent>
-                    <CarouselPrevious className="md:left-0 invisible md:visible" />
-                    <CarouselNext className="md:right-0 invisible md:visible" />
+                    <CarouselPrevious className="md:left-0 hidden md:flex" />
+                    <CarouselNext className="md:right-0 hidden md:flex" />
                 </Carousel>
             </article>
         </div>
