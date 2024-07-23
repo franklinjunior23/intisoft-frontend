@@ -1,6 +1,6 @@
-export enum KeyQuerys{
+export enum KeyQuerys {
     getCompanies = 'companies',
     getBranchsByCompany = 'branchsbyCompany',
     getUsersByBranch = 'usersByBranch',
-    getUserByOne = 'userByOne'
+    getUserByOne = 'userByOne',
 }

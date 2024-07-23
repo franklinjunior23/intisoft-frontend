@@ -4,13 +4,13 @@ import { ReactNode } from 'react'
 
 export function ReactQueryProvider({ children }: { children: ReactNode }) {
     const queryClient = new QueryClient({
-        defaultOptions:{
-            queries:{
-                refetchOnWindowFocus:true,
-                _optimisticResults:'optimistic'
-            }
-        }
-    });
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: true,
+                _optimisticResults: 'optimistic',
+            },
+        },
+    })
 
     return (
         <QueryClientProvider client={queryClient}>

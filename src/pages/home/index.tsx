@@ -1,35 +1,25 @@
 import { Calendar } from '@/components/ui/calendar'
 import { CompanySlider } from './_components/companies-slider'
 import { useState } from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import CompanyQuantity from '@/components/shared/chart/company'
 
 function PageHome() {
-    const [selected, setSelected] = useState<Date>()
     const [date, setDate] = useState<Date | undefined>(new Date())
     return (
         <div className="">
-            <div className="md:flex justify-between flex-shrink h-[260px]">
-                <header className="md:w-[70%]">
+            <div className="md:flex justify-between flex-shrink h-[205px] gap-5">
+                <header className="md:w-[73%]">
                     <CompanySlider />
                 </header>
 
-                <Card className="h-full ">
-                    <CardHeader className="items-center pb-0">
-                        <CardTitle>Empresas registradas</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1 pb-0">
+                <Card className="h-full w-[25%] ">
+                    <CardContent className="">
                         <CompanyQuantity />
                     </CardContent>
                 </Card>
             </div>
-            <div className="w-fit">
+            <div className="w-fit mt-5">
                 <Calendar
                     mode="single"
                     selected={date}

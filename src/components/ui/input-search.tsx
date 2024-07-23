@@ -34,7 +34,7 @@ export default function InputDinamic({
         setValueField(value)
 
         const exist = dataField.filter((item) => item === value)
-        
+
         if (value && exist.length === 0) {
             setDataField((prev) => [...prev, value])
         }

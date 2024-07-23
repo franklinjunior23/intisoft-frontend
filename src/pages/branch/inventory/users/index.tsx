@@ -8,7 +8,6 @@ function PageUsers() {
     if (isLoading) return <div>Loading...</div>
     if (isError) return <div>Error</div>
 
-
     return (
         <div>
             <span>{data?.meta.quantity} users</span>

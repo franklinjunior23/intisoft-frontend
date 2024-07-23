@@ -1,8 +1,5 @@
-
 function PageDevices() {
-  return (
-    <div>PageDevices</div>
-  )
+    return <div>PageDevices</div>
 }
 
 export default PageDevices

@@ -26,9 +26,7 @@ export function GetOneUser() {
     return useQuery({
         queryKey: [KeyQuerys.getUserByOne],
         queryFn: async () => {
-            const { data } = await InstanceAxios.get(
-                `user/${userId}`
-            )
+            const { data } = await InstanceAxios.get(`user/${userId}`)
             return data
         },
     })

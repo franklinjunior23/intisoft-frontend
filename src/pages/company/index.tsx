@@ -12,6 +12,7 @@ export function PageCompanie() {
     if (isLoading) return <h1>Loading...</h1>
     return (
         <main>
+            <header>Razon Social : {data?.data.businessName}</header>
             <h3>Empresa : {company}</h3>
             {data?.meta.quantity}
             <article className="flex gap-2 mt-5">

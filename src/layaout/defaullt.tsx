@@ -10,10 +10,9 @@ function Default() {
                 <Navbar />
             </nav>
             <article className="md:ml-[280px] p-3">
-                <header className="mb-4 flex justify-between items-center">
+                <header className="mb-4 flex justify-between items-start">
                     <div>
                         <BreadCrum />
-                        <h2 className="text-lg font-medium">Home</h2>
                     </div>
                     <div className="hidden md:block">
                         <Notification />

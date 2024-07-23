@@ -1,8 +1,7 @@
-import { company, Meta } from "./company";
+import { company, Meta } from './company'
 
-export interface branchs extends company{
+export interface branchs extends company {
     branchs?: branch[] | []
-
 }
 export interface branch {
     id: string
@@ -12,6 +11,6 @@ export interface branch {
 }
 
 export interface BranchsGet {
-    data: branchs 
+    data: branchs
     meta: Meta
 }

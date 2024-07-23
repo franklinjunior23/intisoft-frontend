@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import ItemCompany from './item-companie'
 import { Button } from '@/components/ui/button'
-import { PlusCircle, X, XCircle } from 'lucide-react'
+import { PlusCircle, XCircle } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
     Popover,
@@ -76,7 +76,7 @@ export function CompanySlider() {
                         </Button>
                     )}
                 </div>
-                <div>
+                <div className="flex w-full justify-between items-end md:block md:w-fit">
                     <Badge>
                         <TooltipProvider>
                             <Tooltip>
@@ -95,7 +95,7 @@ export function CompanySlider() {
                                 <PlusCircle className="w-4 h-4" />
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent align='end'>
+                        <PopoverContent align="end">
                             <FormCompany />
                         </PopoverContent>
                     </Popover>

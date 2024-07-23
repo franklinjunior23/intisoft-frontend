@@ -10,8 +10,8 @@ export function PageUserOne() {
     const { userId } = useParams()
 
     useEffect(() => {
-        (async () => {
-            const {data} = await InstanceAxios.get(`user/${userId}`)
+        ;(async () => {
+            const { data } = await InstanceAxios.get(`user/${userId}`)
             console.log(data)
             setUserdata(data)
         })()

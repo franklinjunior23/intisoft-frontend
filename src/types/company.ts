@@ -28,4 +28,3 @@ export interface BranchCreate {
     name: string
     companyId: string
 }
-

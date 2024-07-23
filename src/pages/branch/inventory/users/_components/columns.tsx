@@ -195,7 +195,7 @@ export const columns: ColumnDef<user>[] = [
     {
         id: 'actions',
         header: '',
-        cell: ({row}) => <EditUser data={row.original} />,
+        cell: ({ row }) => <EditUser data={row.original} />,
         enableSorting: false,
         enableHiding: false,
     },
