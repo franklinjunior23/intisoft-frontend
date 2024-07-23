@@ -16,8 +16,14 @@ import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import ItemCompany from './item-companie'
 import { Button } from '@/components/ui/button'
-import { X, XCircle } from 'lucide-react'
+import { PlusCircle, X, XCircle } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+import FormCompany from './form-create-company'
 
 export function CompanySlider() {
     const [filterCompany, setfilterCompany] = useState<string>('')
@@ -34,7 +40,7 @@ export function CompanySlider() {
                     <Skeleton className="w-[200px] h-8" />
                     <Skeleton className="w-[90px] h-4" />
                 </header>
-                <main className='mt-4'>
+                <main className="mt-4">
                     <Carousel>
                         <CarouselContent className="gap-3 sm:px-4 h-[150px]">
                             <Skeleton className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]" />
@@ -52,7 +58,7 @@ export function CompanySlider() {
 
     return (
         <div>
-            <header className="mb-4 flex  flex-col-reverse md:flex-row justify-start  items-start md:items-center md:justify-between w-full gap-2" >
+            <header className="mb-4 flex  flex-col-reverse md:flex-row justify-start  items-start md:items-center md:justify-between w-full gap-2">
                 <div className="flex items-center gap-2 w-full md:w-fit">
                     <Input
                         className=" w-[100%] md:max-w-[200px]"
@@ -70,18 +76,30 @@ export function CompanySlider() {
                         </Button>
                     )}
                 </div>
-                <Badge  >
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                Empresas: {data?.meta.quantity}
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                Empresas: {data?.meta.quantity}
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </Badge>
+                <div>
+                    <Badge>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    Empresas: {data?.meta.quantity}
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Empresas: {data?.meta.quantity}
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </Badge>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button size={'icon'} className="ml-2">
+                                <PlusCircle className="w-4 h-4" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align='end'>
+                            <FormCompany />
+                        </PopoverContent>
+                    </Popover>
+                </div>
             </header>
             <article>
                 <Carousel>

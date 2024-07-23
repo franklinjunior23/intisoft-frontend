@@ -1,7 +1,6 @@
 import { Calendar } from '@/components/ui/calendar'
 import { CompanySlider } from './_components/companies-slider'
 import { useState } from 'react'
-import { DayPicker } from 'react-day-picker'
 import {
     Card,
     CardContent,

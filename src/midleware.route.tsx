@@ -51,7 +51,7 @@ export function MidlewareRoute() {
 
     return (
         <>
-            {profile?.role === ROLE.CLIENTE && <ClientRoutes />}
+            {profile?.role === ROLE.ADMIN && <ClientRoutes />}
             {!profile?.role && <PublicRoutes />}
         </>
     )

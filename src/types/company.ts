@@ -20,6 +20,10 @@ export interface CompanyCreate {
     businessName: string
 }
 
+export interface editCompany extends Partial<CompanyCreate> {
+    id: string
+}
+
 export interface BranchCreate {
     name: string
     companyId: string
