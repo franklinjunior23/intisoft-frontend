@@ -45,7 +45,7 @@ export default function EllipsisEdit({ id, editing }: EditCompany) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant={'link'} size={'icon'}>
-                    <EllipsisVertical className="w-5 h-5" />
+                    <EllipsisVertical className="w-5 h-5 text-black dark:text-white" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

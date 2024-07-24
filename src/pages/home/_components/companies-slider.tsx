@@ -13,7 +13,7 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ItemCompany from './item-companie'
 import { Button } from '@/components/ui/button'
 import { PlusCircle, XCircle } from 'lucide-react'
@@ -24,10 +24,15 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 import FormCompany from './form-create-company'
+import { useStateCompany } from '@/states/company.state'
 
 export function CompanySlider() {
     const [filterCompany, setfilterCompany] = useState<string>('')
     const { isLoading, data, isError } = GetCompanies()
+    const { setAdd } = useStateCompany()
+    useEffect(() => {
+        if (!isLoading) setAdd(data?.data ?? [])
+    }, [isLoading, data, setAdd])
 
     function onchangeCompani(e: React.ChangeEvent<HTMLInputElement>) {
         setfilterCompany(e.target.value)

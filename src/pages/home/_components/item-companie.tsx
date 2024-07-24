@@ -44,7 +44,6 @@ function Edit({ id, value, notediting, mutatefn }: Edit) {
                 id,
                 name: valueInput,
             })
-            toast.success('Editado de manera correcta ')
             notediting()
         }
     }

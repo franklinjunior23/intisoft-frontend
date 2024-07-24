@@ -3,4 +3,5 @@ export enum LocalStorageKeys {
     branch = 'branchId',
     user = 'userId',
     device = 'deviceId',
+    stateNavbar = 'NavbarState',
 }
