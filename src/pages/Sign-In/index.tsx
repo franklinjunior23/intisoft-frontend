@@ -3,7 +3,7 @@ import { Codesandbox } from 'lucide-react'
 
 export default function SignIn() {
     return (
-        <main className="w-screen h-screen bg-slate-50/50 grid md:grid-cols-2">
+        <main className="w-screen h-screen bg-slate-50/50 dark:bg-gray-800 grid md:grid-cols-2">
             <main className="p-8 bg-black/90 min-h-full">
                 <div className="flex flex-col justify-between font-semibold h-full text-white">
                     <span className=" flex items-center gap-4  text-lg">

@@ -110,7 +110,7 @@ export default function ItemCompany({
     }
     return (
         <CarouselItem className="md:w-[360px]   md:max-w-[360px]  md:min-w-[360px]">
-            <div className=" p-4 rounded-xl bg-orange-200/50 h-full">
+            <div className=" p-4 rounded-xl bg-orange-200/80 dark:bg-orange-500/80 h-full">
                 <header className="flex justify-between items-center">
                     {EditItem ? (
                         <>

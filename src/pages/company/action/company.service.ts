@@ -15,3 +15,12 @@ export function BranchsGet() {
         },
     })
 }
+
+export async function CreateBranch({ name }: { name: string }) {
+    const idBranch = localStorage.getItem(LocalStorageKeys.company)
+    const { data } = await InstanceAxios.post('branchs', {
+        companyId: idBranch,
+        name: name,
+    })
+    return data
+}

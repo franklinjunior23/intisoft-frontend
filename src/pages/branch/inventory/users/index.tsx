@@ -1,6 +1,8 @@
 import { GetUsers } from '../../action/users-action.service'
 import { DataTable } from '@/components/shared/table'
 import { columns } from './_components/columns'
+import { Badge } from '@/components/ui/badge'
+import AddUser from './_components/add-user'
 
 function PageUsers() {
     const { isLoading, data, isError } = GetUsers()
@@ -10,8 +12,6 @@ function PageUsers() {
 
     return (
         <div>
-            <span>{data?.meta.quantity} users</span>
-
             <DataTable
                 filterColumn={{
                     column: 'name',
@@ -19,6 +19,12 @@ function PageUsers() {
                 }}
                 data={data?.data || []}
                 columns={columns}
+                childrenTab={
+                    <>
+                        <Badge>Usuarios: {data?.meta.quantity}</Badge>
+                        <AddUser />
+                    </>
+                }
             />
         </div>
     )

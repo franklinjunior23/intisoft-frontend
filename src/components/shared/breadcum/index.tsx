@@ -83,8 +83,8 @@ function BreadCrum() {
                     })}
                 </BreadcrumbList>
             </Breadcrumb>
-            <h2 className="text-xl mt-1 font-medium">
-                {pathname === '/' ? 'Home' : params}
+            <h2 className="text-xl mt-1 font-medium capitalize">
+                {pathname === '/' ? 'Home' : params[params.length - 1]}
             </h2>
         </>
     )

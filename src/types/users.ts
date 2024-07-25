@@ -45,3 +45,7 @@ export enum typedocument {
     DOCEXTANJERO = 'Carnet de extranjeria',
     RUC = 'RUC',
 }
+export enum gender {
+    MASC = 'Masculino',
+    FEM = 'Femenino',
+}
