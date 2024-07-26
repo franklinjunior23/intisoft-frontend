@@ -1,11 +1,12 @@
 import { KeyQuerys } from '@/constants/keys-query'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { InstanceAxios } from '@/helper/axios-config'
+import { LocalStorageState } from '@/states/localstorage.state'
 import type { BranchsGet } from '@/types/branchs'
 import { useQuery } from '@tanstack/react-query'
 
 export function BranchsGet() {
-    const company = localStorage.getItem(LocalStorageKeys.company)
+    const { company } = LocalStorageState()
 
     return useQuery<BranchsGet>({
         queryKey: [KeyQuerys.getBranchsByCompany],

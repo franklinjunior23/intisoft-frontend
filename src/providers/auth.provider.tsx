@@ -36,6 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             name: data.profile.name,
             lastName: data.profile.lastName,
             role: data.profile.role,
+            company: data.profile?.company,
         })
         setToken(data.token)
     }
@@ -52,10 +53,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             `Bienvenido ${data.profile.name} ${data.profile.lastName}`
         )
         localStorage.setItem('profile', JSON.stringify(data.profile))
+
         setUser({
             name: data.profile.name,
             lastName: data.profile.lastName,
             role: data.profile.role,
+            company: data.profile?.company,
         })
         setToken(data.token)
     }
@@ -64,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await InstanceAxios.post('auth/logout')
         toast.success(`Sesion cerrada ${User?.name}`)
         localStorage.removeItem('isLoged')
+        localStorage.removeItem('profile')
         setUser(null)
         setToken(null)
     }

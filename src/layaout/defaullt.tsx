@@ -22,14 +22,14 @@ function Default() {
 
     return (
         <main className="w-full min-w-dvw max-w-[320px]:p-2">
-            <Card
+            <div
                 className={cn(
                     'md:fixed transition-all md:h-dvh  bg-slate-50 dark:bg-inherit shadow-md  p-3',
                     isOpen ? widthToDiv.nav.open : widthToDiv.nav.close
                 )}
             >
                 <Navbar />
-            </Card>
+            </div>
             <article
                 className={cn(
                     'p-3',

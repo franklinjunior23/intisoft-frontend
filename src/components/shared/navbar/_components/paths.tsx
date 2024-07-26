@@ -8,12 +8,19 @@ import { cn } from '@/lib/utils'
 import { RouteUser } from '@/routes'
 import { useNavbarStore } from '@/states/navbar.state'
 import { routes } from '@/types/routes'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { Building, ChevronDown, ChevronUp, Dot } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
-function ItemHref({ icon, href, label, children }: routes) {
+function ItemHref({
+    icon,
+    href,
+    label,
+    children,
+    ifChildren,
+    onclick,
+}: routes) {
     const [OpenChildren, setOpenChildren] = useState<boolean>(false)
     const { pathname } = useLocation()
     const { isOpen } = useNavbarStore()
@@ -23,21 +30,37 @@ function ItemHref({ icon, href, label, children }: routes) {
         <>
             <div
                 className={cn(
-                    'px-3 py-3 rounded-lg flex gap-2 items-center w-full relative text-sm',
+                    'px-3 py-3 rounded-lg  flex  items-center w-full relative text-sm',
                     isHref
-                        ? 'bg-slate-200 dark:bg-slate-50/20 font-semibold text-base'
-                        : 'hover:bg-slate-200/90 dark:hover:bg-slate-50/10'
+                        ? 'bg-slate-200 dark:bg-slate-50/10 font-medium'
+                        : 'hover:bg-slate-200/90 dark:hover:bg-slate-50/10',
+                    !ifChildren && 'gap-2'
                 )}
-                onClick={() => setOpenChildren(!OpenChildren)}
+                onClick={() => children && setOpenChildren(!OpenChildren)}
             >
-                {icon}
+                <Link to={href!}> {icon}</Link>
+                {ifChildren &&
+                    (isOpen ? (
+                        ifChildren && (
+                            <Dot className={cn('w-5 h-5', isOpen && 'ml-2')} />
+                        )
+                    ) : (
+                        <Building className="w-5 h-5" />
+                    ))}
                 <>
                     {isOpen &&
                         (isLink ? (
-                            <Link to={href!}>{label}</Link>
+                            <Link
+                                to={href!}
+                                onClick={() =>
+                                    ifChildren && onclick && onclick()
+                                }
+                            >
+                                {label}
+                            </Link>
                         ) : (
                             <>
-                                <span>{label}</span>
+                                <Link to={href!}>{label}</Link>
                                 {children &&
                                     (OpenChildren ? (
                                         <ChevronUp className="w-5 absolute right-2 h-5  transition-all" />
@@ -53,9 +76,24 @@ function ItemHref({ icon, href, label, children }: routes) {
                 </>
             </div>
             {OpenChildren && (
-                <div className="flex flex-col gap-1 w-full">
+                <div className="flex mt-2 flex-col gap-2 w-full -p-2 justify-start ">
                     {children?.map((child, index) => {
-                        return <ItemHref key={index} {...child} />
+                        return (
+                            <TooltipProvider key={index}>
+                                <Tooltip>
+                                    <TooltipTrigger className="w-full">
+                                        <ItemHref
+                                            key={index}
+                                            {...child}
+                                            ifChildren={true}
+                                        />
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">
+                                        {child.label}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        )
                     })}
                 </div>
             )}
@@ -66,6 +104,7 @@ function ItemHref({ icon, href, label, children }: routes) {
 export default function Paths() {
     const { isOpen } = useNavbarStore()
     const paths = RouteUser()
+    const path = paths()
 
     return (
         <main
@@ -74,7 +113,7 @@ export default function Paths() {
                 !isOpen && 'grid place-content-center'
             )}
         >
-            {paths.map((path, index) => {
+            {path?.map((path, index) => {
                 return (
                     <TooltipProvider key={index}>
                         <Tooltip>

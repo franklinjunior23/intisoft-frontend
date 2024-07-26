@@ -39,8 +39,8 @@ const schema = z.object({
     gender: z.enum(['Femenino', 'Masculino']),
     status: z.enum([StatusUser.ACTIVE]).default(StatusUser.ACTIVE),
     document: z.object({
-        type: z.enum(['dni', 'passport', 'docExtanjero', 'ruc']),
-        number: z.string().min(8),
+        type: z.enum(['Dni', 'passport', 'docExtanjero', 'ruc']),
+        number: z.string().min(5),
     }),
     post: z.string().min(3),
 })

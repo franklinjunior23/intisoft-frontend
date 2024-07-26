@@ -42,9 +42,7 @@ export function FormSign() {
             console.log('success')
         },
         onError: (err: ErrorAxios) => {
-            console.log(err?.response?.data)
-
-            console.log('error')
+            toast.error(err?.response?.data?.message)
         },
     })
 
@@ -93,7 +91,12 @@ export function FormSign() {
                 />
             </form>
             <footer className="mt-6">
-                <Button form="form-sign-in" type="submit" className="w-full">
+                <Button
+                    form="form-sign-in"
+                    disabled={mutateSign.isPending}
+                    type="submit"
+                    className="w-full"
+                >
                     Ingresar
                 </Button>
             </footer>

@@ -3,4 +3,5 @@ export enum KeyQuerys {
     getBranchsByCompany = 'branchsbyCompany',
     getUsersByBranch = 'usersByBranch',
     getUserByOne = 'userByOne',
+    getCompanyByClient = 'companyByClient',
 }

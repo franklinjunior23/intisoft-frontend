@@ -1,5 +1,11 @@
+import { branch } from './branchs'
+
 export interface CompaniesGet {
     data: company[] | []
+    meta: Meta
+}
+export interface CompanyGet {
+    data: company
     meta: Meta
 }
 
@@ -8,6 +14,7 @@ export interface company {
     name: string
     place: string
     businessName: string
+    branches?: branch[] | []
     createdAt: Date
     deletedAt?: null | Date
 }

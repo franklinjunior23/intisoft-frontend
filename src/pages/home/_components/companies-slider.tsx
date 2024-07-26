@@ -61,6 +61,7 @@ export function CompanySlider() {
         )
     if (isError) return <div>Error</div>
 
+    console.log(data)
     return (
         <div>
             <header className="mb-4 flex  flex-col-reverse md:flex-row justify-start  items-start md:items-center md:justify-between w-full gap-2">

@@ -9,6 +9,20 @@ import { PageBranch } from './pages/branch'
 import PageUsers from './pages/branch/inventory/users'
 import PageDevices from './pages/branch/inventory/device'
 import { PageUserOne } from './pages/branch/inventory/users/user-id'
+import ClientHome from './pages/home/index.client'
+
+export function ClientCompany() {
+    return (
+        <Routes>
+            <Route element={<Default />}>
+                <Route path="/" element={<ClientHome />} />
+                <Route path="usuarios" element={<PageUsers />} />
+                <Route path="dispositivos" element={<PageUsers />} />
+                <Route path="visitas-tecnicas" element={<PageUsers />} />
+            </Route>
+        </Routes>
+    )
+}
 
 export function ClientRoutes() {
     return (
@@ -52,6 +66,7 @@ export function MidlewareRoute() {
     return (
         <>
             {profile?.role === ROLE.ADMIN && <ClientRoutes />}
+            {profile?.role === ROLE.CLIENTE && <ClientCompany />}
             {!profile?.role && <PublicRoutes />}
         </>
     )
