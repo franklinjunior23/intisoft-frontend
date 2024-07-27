@@ -15,12 +15,14 @@ interface InputDinamicProps {
     data: string[]
     onChange: (value: string) => void
     value?: string | undefined
+    placeholder?: string | undefined
 }
 
 export default function InputDinamic({
     data,
     value,
     onChange,
+    placeholder,
 }: InputDinamicProps) {
     const [dataField, setDataField] = useState<string[]>([])
     const [valueField, setValueField] = useState<string | undefined>(value)
@@ -58,7 +60,7 @@ export default function InputDinamic({
         <>
             <Select onValueChange={onChange} value={value}>
                 <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar el estado del usuario" />
+                    <SelectValue placeholder={placeholder ?? 'Seleccione'} />
                 </SelectTrigger>
                 <SelectContent className="w-[300px]" align="start">
                     {dataField.map((item, index) => (

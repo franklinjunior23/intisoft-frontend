@@ -1,8 +1,8 @@
-import { GetCompanyClient } from "./action/company-client.service"
+import { GetCompanyClient } from './action/company-client.service'
 
 export default function ClientHome() {
-    const {isLoading,data} = GetCompanyClient()
-    if(isLoading) return <h1>Loading...</h1>
+    const { isLoading, data } = GetCompanyClient()
+    if (isLoading) return <h1>Loading...</h1>
 
     return (
         <div className="">

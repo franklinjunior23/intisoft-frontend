@@ -13,6 +13,7 @@ function App() {
                     <BrowserRouter>
                         <PageIndex />
                     </BrowserRouter>
+
                     <SonnerProvider />
                 </ThemeProvider>
             </ReactQueryProvider>

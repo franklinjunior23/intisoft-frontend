@@ -11,11 +11,12 @@ export const AdminRoutes = (): routes[] => {
     const { setCompany } = LocalStorageState()
     function addLocal(company: string) {
         setCompany(company)
-        
+
         setTimeout(() => {
-            client.invalidateQueries([KeyQuerys.getBranchsByCompany,
+            client.invalidateQueries([
+                KeyQuerys.getBranchsByCompany,
             ] as InvalidateQueryFilters)
-        }, 500) 
+        }, 500)
     }
 
     return [

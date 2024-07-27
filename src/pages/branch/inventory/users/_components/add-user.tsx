@@ -28,37 +28,31 @@ import {
 import { gender, StatusUser, typedocument } from '@/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircleIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { Control, FieldValues, useForm } from 'react-hook-form'
 import { TYPEPOST } from '../data/data.user'
 import { DialogClose } from '@radix-ui/react-dialog'
-
-const schema = z.object({
-    name: z.string().min(3),
-    lastName: z.string().min(3),
-    gender: z.enum(['Femenino', 'Masculino']),
-    status: z.enum([StatusUser.ACTIVE]).default(StatusUser.ACTIVE),
-    document: z.object({
-        type: z.enum(['Dni', 'passport', 'docExtanjero', 'ruc']),
-        number: z.string().min(5),
-    }),
-    post: z.string().min(3),
-})
+import SchemaUser from '../validate/user-validate'
+import { z } from 'zod'
+import FieldsEmail from './form/field-email'
+import FieldArea from './form/field-area'
 
 function FormUser() {
     const typedoc = Object.values(typedocument)
     const typegender = Object.values(gender)
     const statusUser = Object.values(StatusUser)
-    const formd = useForm<z.infer<typeof schema>>({
-        resolver: zodResolver(schema),
+    const formd = useForm<z.infer<typeof SchemaUser>>({
+        resolver: zodResolver(SchemaUser),
+        defaultValues: {
+            email: [{ type: 'Gmail', direction: '', password: '' }],
+        },
     })
-    function Submit(data: z.infer<typeof schema>) {
+    function Submit(data: z.infer<typeof SchemaUser>) {
         console.log(data)
     }
     return (
         <Form {...formd}>
             <form onSubmit={formd.handleSubmit(Submit)} className="w-full">
-                <div className="grid grid-cols-2 gap-2 items-start">
+                <div className="grid md:grid-cols-2 gap-2 items-start">
                     <div className="grid grid-cols-2 gap-y-3 gap-2">
                         <FormField
                             name="name"
@@ -142,55 +136,100 @@ function FormUser() {
                             )}
                         />
                     </div>
-                    <div className="grid grid-cols-2 gap-y-3 gap-2">
-                        <FormField
-                            name="gender"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Genero</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
+                    <div>
+                        <div className="grid grid-cols-2 gap-y-3 gap-2">
+                            <FormField
+                                name="gender"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Genero</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleccionar el Genero" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {typegender.map((type) => (
+                                                    <SelectItem
+                                                        key={type}
+                                                        value={type}
+                                                    >
+                                                        {type}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="post"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Cargo</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccionar el Genero" />
-                                            </SelectTrigger>
+                                            <InputDinamic
+                                                data={TYPEPOST}
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                            />
                                         </FormControl>
-                                        <SelectContent>
-                                            {typegender.map((type) => (
-                                                <SelectItem
-                                                    key={type}
-                                                    value={type}
-                                                >
-                                                    {type}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="post"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Cargo</FormLabel>
-                                    <FormControl>
-                                        <InputDinamic
-                                            data={TYPEPOST}
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="status"
+                                defaultValue={StatusUser.ACTIVE}
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Estado del usuario
+                                        </FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleccione el estado del usuario" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {statusUser.map((type) => (
+                                                    <SelectItem
+                                                        key={type}
+                                                        value={type}
+                                                    >
+                                                        {type}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
+                    <FieldsEmail
+                        control={
+                            formd.control as unknown as Control<FieldValues>
+                        }
+                    />
+                    <FieldArea
+                        control={
+                            formd.control as unknown as Control<FieldValues>
+                        }
+                    />
                 </div>
 
                 <DialogFooter>
@@ -209,7 +248,7 @@ export default function AddUser() {
         <div>
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button>
+                    <Button size={'icon'}>
                         <PlusCircleIcon className="w-4 h-4" />
                     </Button>
                 </DialogTrigger>
