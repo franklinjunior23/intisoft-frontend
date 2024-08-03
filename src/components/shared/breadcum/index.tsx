@@ -45,11 +45,11 @@ function BreadCrum() {
                             <BreadcrumbItem key={href}>
                                 <BreadcrumbSeparator />
                                 {isLast ? (
-                                    <BreadcrumbPage>{item} </BreadcrumbPage>
+                                    <BreadcrumbPage>{decodeURIComponent(item)} </BreadcrumbPage>
                                 ) : isDropdown ? (
                                     <DropdownMenu>
                                         <DropdownMenuTrigger className="flex items-center gap-2">
-                                            {item}
+                                            {decodeURIComponent(item)}
                                             <ChevronDownIcon className="w-4 h-4" />
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent
@@ -75,7 +75,9 @@ function BreadCrum() {
                                     </DropdownMenu>
                                 ) : (
                                     <BreadcrumbLink asChild>
-                                        <Link to={href}>{item}</Link>
+                                        <Link to={href}>
+                                            {decodeURIComponent(item)}
+                                        </Link>
                                     </BreadcrumbLink>
                                 )}
                             </BreadcrumbItem>
@@ -83,8 +85,10 @@ function BreadCrum() {
                     })}
                 </BreadcrumbList>
             </Breadcrumb>
-            <h2 className="text-xl mt-1 font-medium capitalize">
-                {pathname === '/' ? 'Home' : params[params.length - 1]}
+            <h2 className="text-xl mt-2 font-medium capitalize">
+                {pathname === '/'
+                    ? 'Home'
+                    : decodeURIComponent(params[params.length - 1])}
             </h2>
         </>
     )

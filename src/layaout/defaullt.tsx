@@ -1,7 +1,6 @@
 import BreadCrum from '@/components/shared/breadcum'
 import { Navbar } from '@/components/shared/navbar'
 import Notification from '@/components/shared/notification'
-import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { useNavbarStore } from '@/states/navbar.state'
 import { Outlet } from 'react-router-dom'
@@ -32,7 +31,6 @@ function Default() {
             </div>
             <article
                 className={cn(
-                    'p-3',
                     isOpen ? widthToDiv.main.open : widthToDiv.main.close
                 )}
             >

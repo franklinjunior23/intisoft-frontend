@@ -6,7 +6,7 @@ export interface user {
     lastName: string
     email?: email[] | null
     document?: { type: string; number: string }
-    gender: boolean
+    gender: boolean | string
     status: StatusUser
     post: string
     createdAt: Date
@@ -20,6 +20,10 @@ export interface user {
         nickName: string
         status: string
     }
+}
+
+export interface userCreate extends user {
+    branchId: string
 }
 
 export interface email {

@@ -4,7 +4,7 @@ const SchemaUser = z.object({
     name: z.string().min(3),
     lastName: z.string().min(3),
     gender: z.enum(['Femenino', 'Masculino']),
-    status: z.enum([StatusUser.ACTIVE]).default(StatusUser.ACTIVE),
+    status: z.enum([StatusUser.ACTIVE, StatusUser.PROCES, StatusUser.RETIRED]),
     document: z.object({
         type: z.enum(['Dni', 'passport', 'docExtanjero', 'ruc']),
         number: z.string().min(5),
@@ -20,6 +20,7 @@ const SchemaUser = z.object({
         )
         .optional(),
     areaId: z.string().optional(),
+    branchId: z.string(),
 })
 
 export default SchemaUser

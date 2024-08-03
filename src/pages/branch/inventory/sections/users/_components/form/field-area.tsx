@@ -13,8 +13,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { Control, FieldValues } from 'react-hook-form'
-import { useStateArea } from '../../../state/state-area'
 import { AddArea } from '../add-area'
+import { useStateArea } from '@/pages/branch/inventory/state/state-area'
 
 export default function FieldArea({
     control,

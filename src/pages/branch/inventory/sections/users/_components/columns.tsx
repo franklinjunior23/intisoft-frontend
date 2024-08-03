@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+    import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
     Tooltip,
@@ -117,13 +117,13 @@ export const columns: ColumnDef<user>[] = [
         cell: ({ row }) => (
             <div
                 className={cn(
-                    ' w-[90px] text-center rounded-lg px-2  text-xs ',
+                    ' w-[100px] text-center rounded-lg px-2 ',
                     {
-                        'bg-green-100 text-green-600':
+                        'bg-green-100 text-green-600 dark:bg-transparent dark:border dark:border-green-600':
                             row.original.status === StatusUser.ACTIVE,
-                        'bg-red-100 text-red-600':
+                        'bg-red-100 text-red-600 dark:bg-transparent dark:border-red-600 dark:border':
                             row.original.status === StatusUser.RETIRED,
-                        'bg-yellow-100 text-yellow-600':
+                        'bg-yellow-100 text-yellow-600 dark:bg-transparent dark:border dark:border-yellow-600 ':
                             row.original.status === StatusUser.PROCES,
                     }
                 )}
@@ -138,7 +138,7 @@ export const columns: ColumnDef<user>[] = [
         header: ({ column }) => (
             <Button
                 variant={'ghost'}
-                className=""
+                className="px-0"
                 onClick={() =>
                     column.toggleSorting(column.getIsSorted() === 'asc')
                 }
@@ -148,11 +148,11 @@ export const columns: ColumnDef<user>[] = [
             </Button>
         ),
         cell: ({ row }) => (
-            <div className="text-xs">
+            <div className="">
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <div className="border px-2 rounded-md">
+                            <div className="">
                                 {row.original.device?.name ?? 'Sin Dispositivo'}
                             </div>
                         </TooltipTrigger>
@@ -169,11 +169,11 @@ export const columns: ColumnDef<user>[] = [
         accessorKey: 'area',
         header: () => <span className="w-fit mx-auto">Area</span>,
         cell: ({ row }) => (
-            <div className="text-xs  text-start">
+            <div >
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <div className="border px-2 rounded-md">
+                            <div>
                                 {row.original.area?.name ?? 'Sin Area'}
                             </div>
                         </TooltipTrigger>

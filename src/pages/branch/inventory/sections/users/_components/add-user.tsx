@@ -25,29 +25,57 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { gender, StatusUser, typedocument } from '@/types/users'
+import {
+    gender,
+    StatusUser,
+    typedocument,
+} from '@/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircleIcon } from 'lucide-react'
 import { Control, FieldValues, useForm } from 'react-hook-form'
 import { TYPEPOST } from '../data/data.user'
 import { DialogClose } from '@radix-ui/react-dialog'
-import SchemaUser from '../validate/user-validate'
+import SchemaUser from '@/pages/branch/inventory/validate/user-validate'
 import { z } from 'zod'
 import FieldsEmail from './form/field-email'
 import FieldArea from './form/field-area'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createUser } from '../service/user.service'
+import { LocalStorageKeys } from '@/constants/localstorage-keys'
+import { toast } from 'sonner'
+import { RefObject, useRef } from 'react'
 
 function FormUser() {
+    const refButtonXloaw = useRef<RefObject<HTMLButtonElement>>()
     const typedoc = Object.values(typedocument)
     const typegender = Object.values(gender)
     const statusUser = Object.values(StatusUser)
+    const client = useQueryClient()
     const formd = useForm<z.infer<typeof SchemaUser>>({
         resolver: zodResolver(SchemaUser),
         defaultValues: {
             email: [{ type: 'Gmail', direction: '', password: '' }],
+            branchId: localStorage.getItem(LocalStorageKeys.branch)!,
+        },
+    })
+
+    const CREATEUSER = useMutation({
+        mutationFn: async (datos: z.infer<typeof SchemaUser>) => {
+            return await createUser(datos)
+        },
+        onSuccess: (data) => {
+            if (!data.success)
+                return toast.info(data.message ?? 'Error al crear un usuario ')
+            toast.success(data.message)
+            client.refetchQueries()
+            refButtonXloaw.current?.current?.click()
+        },
+        onError: (err) => {
+            toast.error(err.message)
         },
     })
     function Submit(data: z.infer<typeof SchemaUser>) {
-        console.log(data)
+        CREATEUSER.mutate(data)
     }
     return (
         <Form {...formd}>
@@ -234,7 +262,7 @@ function FormUser() {
 
                 <DialogFooter>
                     <Button type="submit">Crear Usuarios</Button>
-                    <DialogClose asChild>
+                    <DialogClose asChild ref={refButtonXloaw}>
                         <Button variant={'ghost'}>Cancelar</Button>
                     </DialogClose>
                 </DialogFooter>

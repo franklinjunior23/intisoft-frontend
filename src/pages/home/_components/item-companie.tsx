@@ -11,6 +11,7 @@ import EllipsisEdit from './item-edit-company'
 import { toast } from 'sonner'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { editCompany as EditCompany } from '../action/company.service'
+import { LocalStorageState } from '@/states/localstorage.state'
 
 type dataCompany = {
     id: string
@@ -84,6 +85,7 @@ export default function ItemCompany({
 }: company) {
     const [EditItem, setEditItem] = useState<boolean>(false)
     const Client = useQueryClient()
+    const { setCompany } = LocalStorageState()
 
     const editCompany = useMutation({
         mutationFn: async (data: editCompany) => {
@@ -126,10 +128,7 @@ export default function ItemCompany({
                         <Link
                             to={name}
                             onClick={() => {
-                                localStorage.setItem(
-                                    LocalStorageKeys.company,
-                                    id
-                                )
+                                setCompany(id)
                             }}
                         >
                             <h1 className="text-2xl font-bold">

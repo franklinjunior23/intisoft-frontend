@@ -1,8 +1,9 @@
-import { GetUsers } from '../../action/users-action.service'
+
 import { DataTable } from '@/components/shared/table'
 import { columns } from './_components/columns'
 import { Badge } from '@/components/ui/badge'
 import AddUser from './_components/add-user'
+import { GetUsers } from '@/pages/branch/action/users-action.service'
 
 function PageUsers() {
     const { isLoading, data, isError } = GetUsers()
