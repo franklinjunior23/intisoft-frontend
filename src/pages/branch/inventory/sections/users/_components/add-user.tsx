@@ -25,11 +25,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import {
-    gender,
-    StatusUser,
-    typedocument,
-} from '@/types/users'
+import { gender, StatusUser, typedocument } from '@/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircleIcon } from 'lucide-react'
 import { Control, FieldValues, useForm } from 'react-hook-form'
@@ -43,10 +39,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createUser } from '../service/user.service'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { toast } from 'sonner'
-import { RefObject, useRef } from 'react'
+import { useState } from 'react'
 
-function FormUser() {
-    const refButtonXloaw = useRef<RefObject<HTMLButtonElement>>()
+function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
     const typedoc = Object.values(typedocument)
     const typegender = Object.values(gender)
     const statusUser = Object.values(StatusUser)
@@ -68,7 +63,7 @@ function FormUser() {
                 return toast.info(data.message ?? 'Error al crear un usuario ')
             toast.success(data.message)
             client.refetchQueries()
-            refButtonXloaw.current?.current?.click()
+            CloseDialog()
         },
         onError: (err) => {
             toast.error(err.message)
@@ -262,7 +257,7 @@ function FormUser() {
 
                 <DialogFooter>
                     <Button type="submit">Crear Usuarios</Button>
-                    <DialogClose asChild ref={refButtonXloaw}>
+                    <DialogClose asChild>
                         <Button variant={'ghost'}>Cancelar</Button>
                     </DialogClose>
                 </DialogFooter>
@@ -272,9 +267,15 @@ function FormUser() {
 }
 
 export default function AddUser() {
+    const [StateDialog, setStateDialog] = useState<boolean>(false)
+
+    function Close() {
+        setStateDialog(false)
+    }
+
     return (
         <div>
-            <Dialog>
+            <Dialog open={StateDialog} onOpenChange={setStateDialog}>
                 <DialogTrigger asChild>
                     <Button size={'icon'}>
                         <PlusCircleIcon className="w-4 h-4" />
@@ -288,7 +289,7 @@ export default function AddUser() {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <FormUser />
+                    <FormUser CloseDialog={Close} />
                 </DialogContent>
             </Dialog>
         </div>

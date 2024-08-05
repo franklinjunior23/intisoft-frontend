@@ -2,6 +2,7 @@ import { DataTable } from '@/components/shared/table'
 import { Badge } from '@/components/ui/badge'
 import { GetDevice } from '@/pages/branch/action/device-actiion.service'
 import { columns } from './_components/columns/columns'
+import { CreateDevice } from './_components/form/create-device'
 
 function PageDevices() {
     const { data, isLoading, isError, error } = GetDevice()
@@ -20,6 +21,7 @@ function PageDevices() {
             childrenTab={
                 <>
                     <Badge>Dispositivos: {data?.meta.quantity}</Badge>
+                    <CreateDevice />
                     
                 </>
             }

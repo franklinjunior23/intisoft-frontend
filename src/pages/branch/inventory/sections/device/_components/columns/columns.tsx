@@ -11,7 +11,7 @@ import { CaretSortIcon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
 import { Time, Time_year } from '@/helper/time/transform-date'
 import { EditColumns } from './edit-columns'
-import { StatusDevice } from './status-column'
+import { StatusDevice } from './status-state'
 
 export const columns: ColumnDef<device>[] = [
     {

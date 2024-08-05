@@ -10,7 +10,7 @@ import { Control, FieldValues, useFieldArray } from 'react-hook-form'
 import { TYPEACCOUNT } from '../../data/data.user'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Plus, PlusCircleIcon, Trash } from 'lucide-react'
+import { PlusCircleIcon, Trash } from 'lucide-react'
 
 export default function FieldsEmail({
     control,

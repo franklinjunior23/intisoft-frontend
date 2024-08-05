@@ -45,3 +45,32 @@ export enum deviceStatus {
     INREPAIR = 'En reparación',
     INMANTENANCE = 'En mantenimiento',
 }
+
+export enum deviceType {
+    DESKTOP = 'Pc',
+    SERVER = 'Servidor',
+    LAPTOP = 'Laptop',
+    RED = 'Red',
+    PRINTER = 'Impresora',
+}
+
+export enum Os {
+    WINDOWS = 'Windows',
+    LINUX = 'Linux',
+    MAC = 'Mac',
+}
+export const distroOs = [
+    'Windows 11 Pro',
+    'Windows 11 Pro Education',
+    'Windows 11 Pro for Workstations',
+    'Windows 11 Home',
+    'Windows 10 Pro',
+    'Windows 10 Home',
+    'Windows 8.1 Pro',
+    'Windows 8.1 Home',
+    'Windows 7 Home Basic',
+    'Windows 7 Home Premium',
+    'Windows 7 Professional',
+]
+
+export const architecture = ['x86', 'x64', 'ARM']

@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -12,18 +11,18 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { device, deviceStatus } from '@/types/device'
+import { device } from '@/types/device'
 import { EllipsisVertical } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DeleteItem } from './delete-column'
 import { UseAuth } from '@/providers/auth.provider'
 import { ROLE } from '@/types/role'
+import { StatusItem } from './status.column'
 
 export function EditColumns({ data }: { data: device }) {
     const [StateDrop, setStateDrop] = useState<boolean>(false)
-    const { id, status: statusDevice } = data
-    const STATUS = Object.values(deviceStatus)
+    const { id, status } = data
 
     const Role = UseAuth().profile?.role
 
@@ -64,14 +63,11 @@ export function EditColumns({ data }: { data: device }) {
                         <DropdownMenuSubTrigger>Estado</DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                             <DropdownMenuSubContent>
-                                {STATUS.map((status) => (
-                                    <DropdownMenuCheckboxItem
-                                        key={status}
-                                        checked={status === statusDevice}
-                                    >
-                                        {status}
-                                    </DropdownMenuCheckboxItem>
-                                ))}
+                                <StatusItem
+                                    statusDevice={status}
+                                    id={id}
+                                    close={closeDrop}
+                                />
                             </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                     </DropdownMenuSub>
