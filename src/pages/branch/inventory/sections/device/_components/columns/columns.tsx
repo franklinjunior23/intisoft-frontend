@@ -67,6 +67,7 @@ export const columns: ColumnDef<device>[] = [
     },
     {
         id: 'status',
+        accessorKey: 'status',
         header: ({ column }) => {
             return (
                 <Button

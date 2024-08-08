@@ -1,14 +1,5 @@
 import { Button } from '@/components/ui/button'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog'
-import {
     Form,
     FormControl,
     FormField,
@@ -20,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { SchemaDevice } from '@/pages/branch/inventory/validate/device-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -37,21 +28,47 @@ import { deviceTypeOptions } from '../../constants/types-device'
 import InputDinamic from '@/components/ui/input-search'
 import { BrandsDevice } from '../../constants/brands-device'
 import { cn } from '@/lib/utils'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ActionCreate } from '@/pages/branch/action/device-actiion.service'
+import { toast } from 'sonner'
+import { LaptopDevice } from '../devices/laptop-device'
+import { ServerDevice } from '../devices/servidor-device'
+import { PrintDevice } from '../devices/print-device'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
-function FormDevice() {
+interface FormdDeviceProps {
+    stateDialog: boolean
+    cancelModal: () => void
+}
+
+function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
+    const client = useQueryClient()
     const MUTATE = useMutation({
         mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
             return await ActionCreate(data)
         },
         onSuccess: (data) => {
-            console.log(data)
+            if (data.success) {
+                toast.success(data.message)
+                client.refetchQueries()
+                localStorage.removeItem(LocalStorageKeys.deviceStorage)
+            }
         },
         onError: (error) => {
             console.log(error)
         },
     })
+    type FormData = z.infer<typeof SchemaDevice>
 
     const STATUS = Object.values(deviceStatus)
     const TYPES = Object.values(deviceType)
@@ -61,12 +78,68 @@ function FormDevice() {
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
         },
     })
+    const { setValue, getValues, reset, watch } = formd
 
     const observerType =
         deviceTypeOptions[formd.watch('information.type') ?? '']
+
     function Submit(data: z.infer<typeof SchemaDevice>) {
+        console.log(data)
         MUTATE.mutate(data)
     }
+
+    function CancelModal() {
+        if (!watch('information.type')) return
+        cancelModal()
+        SaveData()
+    }
+
+    function SaveData(): void {
+        const currentData = JSON.stringify(getValues())
+        localStorage.setItem(LocalStorageKeys.deviceStorage, currentData)
+    }
+
+    useEffect(() => {
+        const savedData = localStorage.getItem(LocalStorageKeys.deviceStorage)
+        if (savedData) {
+            const parsedData: FormData = JSON.parse(savedData)
+            reset()
+
+            for (const [key, value] of Object.entries(parsedData)) {
+                console.log(key, value)
+                setValue(key as keyof FormData, value)
+            }
+        }
+    }, [setValue, reset])
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            const data = getValues()
+            if (data.information.type) {
+                SaveData()
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [getValues])
+    useEffect(() => {
+        if (stateDialog) {
+            const savedData = localStorage.getItem(
+                LocalStorageKeys.deviceStorage
+            )
+            if (savedData) {
+                const parsedData: FormData = JSON.parse(savedData)
+                for (const [key, value] of Object.entries(parsedData)) {
+                    setValue(key as keyof FormData, value)
+                }
+            }
+        }
+    }, [stateDialog, setValue])
 
     return (
         <Form {...formd}>
@@ -117,7 +190,10 @@ function FormDevice() {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage />{' '}
+                                    {MUTATE.isPending
+                                        ? 'Guardando...'
+                                        : 'Guardar'}
                                 </FormItem>
                             )}
                         />
@@ -289,12 +365,34 @@ function FormDevice() {
                     {formd.watch('information.type') === deviceType.DESKTOP && (
                         <PcDevice control={formd.control} watch={formd.watch} />
                     )}
+                    {formd.watch('information.type') === deviceType.LAPTOP && (
+                        <LaptopDevice
+                            control={formd.control}
+                            watch={formd.watch}
+                        />
+                    )}
+                    {formd.watch('information.type') === deviceType.SERVER && (
+                        <ServerDevice
+                            control={formd.control}
+                            watch={formd.watch}
+                        />
+                    )}
+                    {formd.watch('information.type') === deviceType.PRINTER && (
+                        <PrintDevice
+                            control={formd.control}
+                            watch={formd.watch}
+                        />
+                    )}
                 </main>
-                <DialogFooter className="mt-5">
+                <AlertDialogFooter className="mt-5">
+                    <AlertDialogCancel onClick={CancelModal}>
+                        Cancel
+                    </AlertDialogCancel>
+
                     <Button type="submit" disabled={MUTATE.isPending}>
-                        Guardar
+                        {MUTATE.isPending ? 'Guardando...' : 'Guardar'}
                     </Button>
-                </DialogFooter>
+                </AlertDialogFooter>
             </form>
         </Form>
     )
@@ -302,29 +400,35 @@ function FormDevice() {
 
 export function CreateDevice() {
     const [StateDialog, setStateDialog] = useState<boolean>(false)
+    function CloseModal() {
+        setStateDialog(false)
+    }
     return (
         <div>
-            <Dialog open={StateDialog} onOpenChange={setStateDialog}>
-                <DialogTrigger asChild>
+            <AlertDialog open={StateDialog} onOpenChange={setStateDialog}>
+                <AlertDialogTrigger asChild>
                     <Button size={'icon'}>
                         <PlusCircledIcon className="w-4 h-4" />
                     </Button>
-                </DialogTrigger>
-                <DialogContent
+                </AlertDialogTrigger>
+                <AlertDialogContent
                     className={cn(
                         'md:max-w-[950px] overflow-y-auto',
                         'h-[85vh] lg:max-w-[1000px] '
                     )}
                 >
-                    <DialogHeader>
-                        <DialogTitle>Crear Dispositivo</DialogTitle>
-                        <DialogDescription>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Crear Dispositivo</AlertDialogTitle>
+                        <AlertDialogDescription>
                             Crear un nuevo dispositivo
-                        </DialogDescription>
-                    </DialogHeader>
-                    <FormDevice />
-                </DialogContent>
-            </Dialog>
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <FormDevice
+                        cancelModal={CloseModal}
+                        stateDialog={StateDialog}
+                    />
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     )
 }

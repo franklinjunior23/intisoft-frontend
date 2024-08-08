@@ -4,4 +4,5 @@ export enum LocalStorageKeys {
     user = 'userId',
     device = 'deviceId',
     stateNavbar = 'NavbarState',
+    deviceStorage = 'deviceStorage'
 }

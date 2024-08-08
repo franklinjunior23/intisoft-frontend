@@ -8,6 +8,7 @@ import { CpuItem } from '../form/cpu-item'
 import { GpuItem } from '../form/gpu-item'
 import { RamItem } from '../form/ram-item'
 import { StorageItem } from '../form/storage-item'
+import { NetworkItem } from '../form/network-item'
 
 interface PcDeviceProps {
     control: Control<z.infer<typeof SchemaDevice>>
@@ -26,10 +27,11 @@ export function PcDevice({ control, watch }: PcDeviceProps) {
                     <AnydeskItem control={control} />
                 </div>
             </div>
-            <footer className="grid grid-cols-3 gap-4">
+            <footer className="grid grid-cols-2 gap-2">
                 <GpuItem control={control} watch={watch} />
                 <RamItem control={control} />
                 <StorageItem control={control} />
+                <NetworkItem control={control} />
             </footer>
         </>
     )
