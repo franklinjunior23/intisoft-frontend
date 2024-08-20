@@ -6,7 +6,7 @@ export async function createUser(datos: z.infer<typeof SchemaUser>) {
     const { data } = await InstanceAxios.post('user', {
         ...datos,
         gender: Boolean(datos.gender === 'Masculino' ? true : false),
-        areaId : Number(datos.areaId)
+        areaId: Number(datos.areaId),
     })
     return data
 }

@@ -55,7 +55,7 @@ export function MotherboardItem({ control }: MotherboardItemProps) {
                         </FormItem>
                     )}
                 />
-                 <FormField
+                <FormField
                     name="motherboard.socket"
                     control={control}
                     render={({ field }) => (

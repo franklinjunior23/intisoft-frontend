@@ -10,6 +10,10 @@ import PageDevices from '@/pages/branch/inventory/sections/device'
 import ClientHome from '@/pages/home/index.client'
 import PageUsers from '@/pages/branch/inventory/sections/users'
 import { PageUserOne } from '@/pages/branch/inventory/sections/users/user-id'
+import DeviceOne from './pages/branch/inventory/sections/device/one-device/id-device'
+import ResumenDevice from './pages/branch/inventory/sections/device/one-device/sections/device-resumen'
+import { PageHardware } from './pages/branch/inventory/sections/device/one-device/sections/hardware'
+import PageUserSytem from './pages/administrators'
 
 export function ClientCompany() {
     return (
@@ -34,6 +38,18 @@ export function ClientRoutes() {
                     <Route path="usuarios" element={<PageUsers />} />
                     <Route path="dispositivos" element={<PageDevices />} />
                     <Route
+                        path="dispositivos/:idDevice"
+                        element={<DeviceOne />}
+                    >
+                        <Route index element={<ResumenDevice />} />
+                        <Route path="hardware" element={<PageHardware />} />
+                        <Route
+                            path="registro-soportes"
+                            element={<>Registro de soporte aca</>}
+                        />
+                    </Route>
+
+                    <Route
                         path=""
                         element={<Navigate replace to="usuarios" />}
                     />
@@ -46,6 +62,8 @@ export function ClientRoutes() {
                     path=":company/:branch/usuarios/:userId"
                     element={<PageUserOne />}
                 />
+                // ADMIN
+                <Route path="user-system" element={<PageUserSytem />} />
             </Route>
         </Routes>
     )

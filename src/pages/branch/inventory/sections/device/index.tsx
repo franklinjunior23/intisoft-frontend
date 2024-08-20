@@ -4,7 +4,6 @@ import { GetDevice } from '@/pages/branch/action/device-actiion.service'
 import { columns } from './_components/columns/columns'
 import { CreateDevice } from './_components/form/create-device'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
-import { Save } from 'lucide-react'
 import { SaveData } from '../../_components/save-data'
 import { SaveDevice } from './_components/save-data'
 
@@ -30,12 +29,10 @@ function PageDevices() {
                 }
             />
 
-            <div className="fixed bottom-5 right-5 bg-yellow-600 p-2 rounded-full">
+            <div className="fixed bottom-5 right-5">
                 <SaveData
                     keyUpdate={LocalStorageKeys.deviceStorage}
-                    children={
-                        <SaveDevice/>
-                    }
+                    children={<SaveDevice />}
                     TooltipDetail={'Tienes un registro guardado'}
                 />
             </div>

@@ -25,7 +25,7 @@ export interface NetworkItemProps {
 interface Network {
     name: string
     mac: string
-    ip3: string
+    ip4: string
     ip6: string
     type: string
     speed: string
@@ -42,7 +42,7 @@ export function NetworkItem({ control }: NetworkItemProps) {
     const [DataNetwork, setDataNetwork] = useState<Network>({
         mac: '',
         name: '',
-        ip3: '',
+        ip4: '',
         ip6: '',
         type: '',
         speed: '',
@@ -56,7 +56,7 @@ export function NetworkItem({ control }: NetworkItemProps) {
         setStateDialog(false)
         toast.success('Registro guardado correctamente')
         setDataNetwork({
-            ip3: '',
+            ip4: '',
             ip6: '',
             mac: '',
             name: '',
@@ -80,8 +80,9 @@ export function NetworkItem({ control }: NetworkItemProps) {
                                 className="border rounded-lg p-3 flex justify-between"
                             >
                                 <ul className="text-xs">
-                                    <li>Ip3: {field.ip3}</li>
-                                    <li>Ip4: {field.ip6} Gb</li>
+                                    <li>Ip4: {field.ip4}</li>
+                                    <li>Ip6: {field.ip6}</li>
+                                    <li>Mac: {field.mac} </li>
                                     <li>Name: {field.name}</li>
                                 </ul>
                                 <div className="flex justify-center items-center gap-2">
@@ -124,12 +125,12 @@ export function NetworkItem({ control }: NetworkItemProps) {
                             />
                         </Label>
                         <Label>
-                            Ip3
+                            Ip4
                             <Input
-                                value={DataNetwork.ip3}
+                                value={DataNetwork.ip4}
                                 onChange={(e) => {
                                     setDataNetwork((prev) => {
-                                        return { ...prev, ip3: e.target.value }
+                                        return { ...prev, ip4: e.target.value }
                                     })
                                 }}
                             />
@@ -141,6 +142,17 @@ export function NetworkItem({ control }: NetworkItemProps) {
                                 onChange={(e) => {
                                     setDataNetwork((prev) => {
                                         return { ...prev, ip6: e.target.value }
+                                    })
+                                }}
+                            />
+                        </Label>
+                        <Label>
+                            Mac
+                            <Input
+                                value={DataNetwork.mac}
+                                onChange={(e) => {
+                                    setDataNetwork((prev) => {
+                                        return { ...prev, mac: e.target.value }
                                     })
                                 }}
                             />

@@ -9,7 +9,7 @@ export const SchemaDetailsDevice = z.object({
             z.object({
                 name: z.string(),
                 mac: z.string(),
-                ip3: z.string().optional(),
+                ip4: z.string().optional(),
                 ip6: z.string().optional(),
                 type: z.string().optional(),
                 speed: z.string().optional(),

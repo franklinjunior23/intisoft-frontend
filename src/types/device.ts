@@ -1,8 +1,6 @@
 import { area } from './area'
 import { user } from './users'
 
-type OptionalArea = Omit<area, 'id'> & Partial<Pick<area, 'id'>>
-
 export interface device {
     id: string
     name: string
@@ -16,12 +14,87 @@ export interface device {
     information: information
     dateCreated: Date
     isRegisterAgent: boolean
-    notes: notes
-    area?: OptionalArea
+    notes: notes[] | null
+    details: {
+        os?: OperatingSystem
+        cpu: Cpu
+        motherboard: motherboard
+        ram: Ram[] | null
+        graphic: Gpu[] | null
+        storage: Storage[] | null
+        network: Network[] | null
+        accounts?: Account[] | null
+    }
+    area?: area
     user?: user
     createdAt: Date
     deletedAt?: Date
 }
+
+export interface OperatingSystem {
+    platform: string
+    distro: string
+    release: string
+    architecture: string
+    kernel?: string
+    build?: string
+    serial?: string
+    uefi?: boolean
+    fqdn?: string
+}
+export interface motherboard {
+    brand: string
+    model: string
+    quantitySlots: string
+    socket: string
+}
+
+export interface Cpu {
+    brand: string
+    model: string
+    cores: string
+    threads: string
+}
+export interface Gpu {
+    brand: string
+    model: string
+    vram: string
+    position: string
+}
+export interface Ram {
+    brand?: string
+    model?: string
+    type: string
+    capacity: number
+    speed: string
+}
+
+export interface Storage {
+    brand: string
+    model: string
+    capacity: string
+    type: string
+}
+
+export interface Network {
+    name: string
+    mac: string
+    ip4: string
+    ip6: string
+    type: string
+    speed: string
+    status: string
+    isDhcp: boolean
+    isVirtual: boolean
+}
+
+export interface Account {
+    name: string
+    role: string
+    user: string
+    password: string
+}
+
 export interface notes {
     title: string
     tag: string[]
@@ -30,7 +103,7 @@ export interface notes {
 }
 
 export interface information {
-    type: string
+    type: deviceType
     typeDevice: string
     brand: string
     model: string

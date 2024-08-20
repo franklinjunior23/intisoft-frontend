@@ -47,7 +47,7 @@ function FormBranch() {
     })
 
     function onSubmit(data: z.infer<typeof schema>) {
-        MUTATECREATE.mutate(data)
+        MUTATECREATE.mutate({ name: data.name })
     }
     return (
         <Form {...formd}>

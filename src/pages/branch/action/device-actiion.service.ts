@@ -30,7 +30,7 @@ export async function UpdateStatus(id: string, status: string) {
 export async function ActionCreate(data: z.infer<typeof SchemaDevice>) {
     const { data: response } = await InstanceAxios.post(`device`, {
         ...data,
-        dateCreated:   new Date(data.dateCreated)
+        dateCreated: new Date(data.dateCreated),
     })
     return response
 }

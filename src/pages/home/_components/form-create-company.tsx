@@ -4,7 +4,6 @@ import { z } from 'zod'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -15,7 +14,6 @@ import { Button } from '@/components/ui/button'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createCompany } from '../action/company.service'
 import { toast } from 'sonner'
-import { KeyQuerys } from '@/constants/keys-query'
 
 const shema = z.object({
     name: z.string().min(3, {
@@ -37,14 +35,18 @@ export default function FormCompany() {
 
     const CREATECOMPANY = useMutation({
         mutationFn: async (data: z.infer<typeof shema>) =>
-            await createCompany(data),
+            await createCompany({
+                name: data.name ?? '',
+                businessName: data.businessName ?? '',
+                place: data.place ?? '',
+            }),
         onSuccess: (data) => {
             if (data.success) {
                 toast.success(
                     data.message ??
                         `Empresa creada correctamente : ${formd.watch('name')}`
                 )
-                queryClien.invalidateQueries(KeyQuerys.getCompanies)
+                queryClien.refetchQueries()
                 return formd.reset()
             }
         },
@@ -106,7 +108,9 @@ export default function FormCompany() {
                 />
                 <footer className="grid grid-cols-2 gap-2 mt-4">
                     <Button variant={'secondary'}>Crear Empresa</Button>
-                    <Button variant={'ghost'}>Cancelar</Button>
+                    <Button variant={'ghost'} type="button">
+                        Cancelar
+                    </Button>
                 </footer>
             </form>
         </Form>

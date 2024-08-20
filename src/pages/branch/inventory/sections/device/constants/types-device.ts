@@ -1,21 +1,15 @@
-import { deviceType } from "@/types/device";
+import { deviceType } from '@/types/device'
 
 export const deviceTypeOptions = {
     [deviceType.DESKTOP]: [
         'All in one',
-        'Escritorio',   
+        'Escritorio',
         'Gabinete',
         'Compatible',
         'Mini pc',
         'Workstation',
     ],
-    [deviceType.SERVER]: [
-        'Rack',
-        'Torre',
-        'Blade',
-        'Microserver',
-        'Mainframe',
-    ],
+    [deviceType.SERVER]: ['Rack', 'Torre', 'Blade', 'Microserver', 'Mainframe'],
     [deviceType.LAPTOP]: [
         'Ultrabook',
         'Netbook',
@@ -41,4 +35,4 @@ export const deviceTypeOptions = {
         'Plotter',
         '3D',
     ],
-};
+}

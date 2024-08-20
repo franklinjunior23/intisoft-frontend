@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Link } from 'react-router-dom'
 import { useStateArea } from './inventory/state/state-area'
@@ -7,6 +7,7 @@ import { LocalStorageState } from '@/states/localstorage.state'
 import { InstanceAxios } from '@/helper/axios-config'
 
 export function PageBranch() {
+    const { idDevice } = useParams()
     const { pathname } = useLocation()
 
     const { branch } = LocalStorageState()
@@ -20,13 +21,18 @@ export function PageBranch() {
             setArea(data.data)
         }
         GetAreas()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [branch])
 
     const { setArea } = useStateArea()
 
     return (
         <div>
-            <Tabs defaultValue={path ?? 'usuarios'} className="w-[400px]">
+            <Tabs
+                hidden={!!idDevice}
+                defaultValue={path ?? 'usuarios'}
+                className="w-[400px]"
+            >
                 <TabsList>
                     <TabsTrigger asChild value="usuarios">
                         <Link to={'usuarios'}>Usuarios</Link>

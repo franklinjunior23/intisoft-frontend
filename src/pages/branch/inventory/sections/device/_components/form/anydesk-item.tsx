@@ -17,8 +17,8 @@ interface AnydeskItemProps {
 export function AnydeskItem({ control }: AnydeskItemProps) {
     return (
         <div>
-            <h3 className='py-2'>Anydesk</h3>
-            <div className='grid grid-cols-2 gap-2 gap-y-1'>
+            <h3 className="py-2">Anydesk</h3>
+            <div className="grid grid-cols-2 gap-2 gap-y-1">
                 <FormField
                     name="anydesk.id"
                     control={control}

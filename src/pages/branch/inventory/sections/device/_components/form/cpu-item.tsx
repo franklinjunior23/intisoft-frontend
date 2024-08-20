@@ -44,7 +44,7 @@ export function CpuItem({ control }: CpuItemProps) {
                                 <SelectContent>
                                     <SelectItem value={'Amd'}>AMD</SelectItem>
                                     <SelectItem value={'Intel'}>
-                                        Intel   
+                                        Intel
                                     </SelectItem>
                                 </SelectContent>
                             </Select>

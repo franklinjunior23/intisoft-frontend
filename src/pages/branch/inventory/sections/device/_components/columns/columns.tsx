@@ -9,9 +9,11 @@ import {
 import { device } from '@/types/device'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
-import { Time, Time_year } from '@/helper/time/transform-date'
+import { Time_year } from '@/helper/time/transform-date'
 import { EditColumns } from './edit-columns'
 import { StatusDevice } from './status-state'
+import { Link } from 'react-router-dom'
+import { Eye } from 'lucide-react'
 
 export const columns: ColumnDef<device>[] = [
     {
@@ -20,7 +22,7 @@ export const columns: ColumnDef<device>[] = [
             <Checkbox
                 checked={
                     table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && 'indeterminate')
+                    (table.getIsSomePageRowsSelected() && true)
                 }
                 onCheckedChange={(value) =>
                     table.toggleAllPageRowsSelected(!!value)
@@ -126,7 +128,17 @@ export const columns: ColumnDef<device>[] = [
         id: 'actions',
         header: '',
         cell: ({ row }) => {
-            return <EditColumns data={row.original} />
+            return (
+                <div className="flex justify-center items-center gap-2">
+                    <Link
+                        to={row.original.id}
+                        className="dark:bg-white/20  bg-black p-2 rounded-lg"
+                    >
+                        <Eye className="w-4 h-4 text-white " />
+                    </Link>
+                    <EditColumns data={row.original} />
+                </div>
+            )
         },
     },
 ]

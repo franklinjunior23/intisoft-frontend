@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { SchemaDevice } from '@/pages/branch/inventory/validate/device-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -36,7 +36,6 @@ import { ServerDevice } from '../devices/servidor-device'
 import { PrintDevice } from '../devices/print-device'
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -45,6 +44,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { IdDialog } from '@/pages/branch/inventory/constants/id-dialog-device'
 
 interface FormdDeviceProps {
     stateDialog: boolean
@@ -53,21 +53,6 @@ interface FormdDeviceProps {
 
 function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
     const client = useQueryClient()
-    const MUTATE = useMutation({
-        mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
-            return await ActionCreate(data)
-        },
-        onSuccess: (data) => {
-            if (data.success) {
-                toast.success(data.message)
-                client.refetchQueries()
-                localStorage.removeItem(LocalStorageKeys.deviceStorage)
-            }
-        },
-        onError: (error) => {
-            console.log(error)
-        },
-    })
     type FormData = z.infer<typeof SchemaDevice>
 
     const STATUS = Object.values(deviceStatus)
@@ -78,13 +63,37 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
         },
     })
-    const { setValue, getValues, reset, watch } = formd
+    const {
+        setValue,
+        getValues,
+        reset,
+        watch,
+        formState: { errors },
+    } = formd
+
+    console.log(errors)
+    const MUTATE = useMutation({
+        mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
+            return await ActionCreate(data)
+        },
+        onSuccess: (data) => {
+            if (data.success) {
+                toast.success(data.message)
+                client.refetchQueries()
+                localStorage.removeItem(LocalStorageKeys.deviceStorage)
+                reset()
+                cancelModal()
+            }
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        },
+    })
 
     const observerType =
         deviceTypeOptions[formd.watch('information.type') ?? '']
 
     function Submit(data: z.infer<typeof SchemaDevice>) {
-        console.log(data)
         MUTATE.mutate(data)
     }
 
@@ -94,10 +103,10 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
         SaveData()
     }
 
-    function SaveData(): void {
+    const SaveData = useCallback(() => {
         const currentData = JSON.stringify(getValues())
         localStorage.setItem(LocalStorageKeys.deviceStorage, currentData)
-    }
+    }, [getValues])
 
     useEffect(() => {
         const savedData = localStorage.getItem(LocalStorageKeys.deviceStorage)
@@ -106,14 +115,14 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
             reset()
 
             for (const [key, value] of Object.entries(parsedData)) {
-                console.log(key, value)
+                console.log(key)
                 setValue(key as keyof FormData, value)
             }
         }
     }, [setValue, reset])
 
     useEffect(() => {
-        const handleBeforeUnload = (event) => {
+        const handleBeforeUnload = () => {
             const data = getValues()
             if (data.information.type) {
                 SaveData()
@@ -126,7 +135,7 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
         }
-    }, [getValues])
+    }, [getValues, SaveData])
     useEffect(() => {
         if (stateDialog) {
             const savedData = localStorage.getItem(
@@ -286,6 +295,7 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                                     <FormLabel>Modelo</FormLabel>
                                     <FormControl>
                                         <Input
+                                            value={field.value}
                                             placeholder="Modelo del equipo .."
                                             {...field}
                                         />
@@ -319,8 +329,9 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                                     <FormControl>
                                         <Input
                                             type="date"
-                                            placeholder="Codigo de equipo .."
                                             {...field}
+                                            value={field.value ? field.value.toISOString().split('T')[0] : ''}
+                                            placeholder="Select a date"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -383,6 +394,12 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                             watch={formd.watch}
                         />
                     )}
+                    {formd.watch('information.type') === deviceType.RED && (
+                        <PrintDevice
+                            control={formd.control}
+                            watch={formd.watch}
+                        />
+                    )}
                 </main>
                 <AlertDialogFooter className="mt-5">
                     <AlertDialogCancel onClick={CancelModal}>
@@ -406,7 +423,7 @@ export function CreateDevice() {
     return (
         <div>
             <AlertDialog open={StateDialog} onOpenChange={setStateDialog}>
-                <AlertDialogTrigger asChild>
+                <AlertDialogTrigger asChild id={IdDialog.DialogDevice}>
                     <Button size={'icon'}>
                         <PlusCircledIcon className="w-4 h-4" />
                     </Button>

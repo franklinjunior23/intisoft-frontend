@@ -155,7 +155,7 @@ export function StorageItem({ control }: StorageItemProps) {
         name: 'storage',
     })
 
-    function Add( data: Storage) {
+    function Add(data: Storage) {
         fields.append(data)
     }
     return (

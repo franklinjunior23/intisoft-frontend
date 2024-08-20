@@ -11,7 +11,7 @@ export const BrandsDevice = [
     'Samsung',
     'Sony',
     'Toshiba',
-     'Antrix',
+    'Antrix',
     'Aorus',
     'Avell',
     'Bangho',
@@ -83,10 +83,10 @@ export const brandsAll = [
     'Hitachi',
     'Zotac',
     'Silicon Power',
-    'Team Group'
-];
+    'Team Group',
+]
 
-export const brandRam=[
+export const brandRam = [
     'Kingston',
     'Generico',
     'Corsair',
@@ -99,5 +99,4 @@ export const brandRam=[
     'Team Group',
     'Mushkin',
     'Pny',
-
 ]

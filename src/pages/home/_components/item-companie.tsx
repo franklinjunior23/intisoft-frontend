@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { CarouselItem } from '@/components/ui/carousel'
-import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { Truncate } from '@/helper/truncate-text'
 import { company, editCompany } from '@/types/company'
 import { Save } from 'lucide-react'

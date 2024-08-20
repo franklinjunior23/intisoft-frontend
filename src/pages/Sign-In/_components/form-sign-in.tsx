@@ -21,14 +21,12 @@ const shemaSign = z.object({
         .string({
             message: 'El usuario debe tener entre 3 y 20 caracteres',
         })
-        .min(3)
-        .max(20),
+        .min(3),
     password: z
         .string({
             message: 'La contraseña debe tener entre 3 y 20 caracteres',
         })
-        .min(3)
-        .max(20),
+        .min(3),
 })
 
 export function FormSign() {

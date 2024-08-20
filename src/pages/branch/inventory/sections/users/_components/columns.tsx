@@ -1,4 +1,4 @@
-    import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
     Tooltip,
@@ -13,6 +13,7 @@ import { CaretSortIcon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
 import { PersonStanding } from 'lucide-react'
 import { EditUser } from './edit-user'
+import { CheckedState } from '@radix-ui/react-checkbox'
 
 export const columns: ColumnDef<user>[] = [
     {
@@ -21,7 +22,7 @@ export const columns: ColumnDef<user>[] = [
             <Checkbox
                 checked={
                     table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && 'indeterminate')
+                    (table.getIsSomePageRowsSelected() && 'indeterminate') as CheckedState
                 }
                 onCheckedChange={(value) =>
                     table.toggleAllPageRowsSelected(!!value)
@@ -116,17 +117,14 @@ export const columns: ColumnDef<user>[] = [
         },
         cell: ({ row }) => (
             <div
-                className={cn(
-                    ' w-[100px] text-center rounded-lg px-2 ',
-                    {
-                        'bg-green-100 text-green-600 dark:bg-transparent dark:border dark:border-green-600':
-                            row.original.status === StatusUser.ACTIVE,
-                        'bg-red-100 text-red-600 dark:bg-transparent dark:border-red-600 dark:border':
-                            row.original.status === StatusUser.RETIRED,
-                        'bg-yellow-100 text-yellow-600 dark:bg-transparent dark:border dark:border-yellow-600 ':
-                            row.original.status === StatusUser.PROCES,
-                    }
-                )}
+                className={cn(' w-[100px] text-center rounded-lg px-2 ', {
+                    'bg-green-100 text-green-600 dark:bg-transparent dark:border dark:border-green-600':
+                        row.original.status === StatusUser.ACTIVE,
+                    'bg-red-100 text-red-600 dark:bg-transparent dark:border-red-600 dark:border':
+                        row.original.status === StatusUser.RETIRED,
+                    'bg-yellow-100 text-yellow-600 dark:bg-transparent dark:border dark:border-yellow-600 ':
+                        row.original.status === StatusUser.PROCES,
+                })}
             >
                 {row.original.status}
             </div>
@@ -169,13 +167,11 @@ export const columns: ColumnDef<user>[] = [
         accessorKey: 'area',
         header: () => <span className="w-fit mx-auto">Area</span>,
         cell: ({ row }) => (
-            <div >
+            <div>
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <div>
-                                {row.original.area?.name ?? 'Sin Area'}
-                            </div>
+                            <div>{row.original.area?.name ?? 'Sin Area'}</div>
                         </TooltipTrigger>
                         <TooltipContent>
                             {row.original.area?.name ?? 'Sin Area'}

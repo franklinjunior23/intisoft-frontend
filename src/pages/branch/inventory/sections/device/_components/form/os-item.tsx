@@ -28,7 +28,7 @@ export function OsItem({ control }: OsItemProps) {
     const OSTYPES = Object.values(Os)
     return (
         <div>
-            <h3 className='py-2'>Sistema Operativo</h3>
+            <h3 className="py-2">Sistema Operativo</h3>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                 <FormField
                     name="os.platform"

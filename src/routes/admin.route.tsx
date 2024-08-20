@@ -1,4 +1,4 @@
-import { Building, LayoutDashboard } from 'lucide-react'
+import { Building, LayoutDashboard, Users } from 'lucide-react'
 import { routes } from '@/types/routes'
 import { useStateCompany } from '@/states/company.state'
 import { useQueryClient, InvalidateQueryFilters } from '@tanstack/react-query' // Import InvalidateQueryFilters
@@ -26,7 +26,7 @@ export const AdminRoutes = (): routes[] => {
             icon: <LayoutDashboard className="w-5 h-5" />,
         },
         {
-            label: 'Empresas',
+            label: '/Empresas',
             icon: <Building className="w-5 h-5" />,
             children:
                 state?.map((company) => ({
@@ -34,6 +34,11 @@ export const AdminRoutes = (): routes[] => {
                     label: company.name,
                     onclick: () => addLocal(company.id),
                 })) || [],
+        },
+        {
+            href: '/user-system',
+            label: 'Usuarios',
+            icon: <Users className="w-5 h-5" />,
         },
     ]
 }

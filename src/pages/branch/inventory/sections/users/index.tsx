@@ -1,4 +1,3 @@
-
 import { DataTable } from '@/components/shared/table'
 import { columns } from './_components/columns'
 import { Badge } from '@/components/ui/badge'
