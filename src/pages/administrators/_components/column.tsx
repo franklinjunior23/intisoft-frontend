@@ -1,6 +1,8 @@
 import { Checkbox } from '@/components/ui/checkbox'
+import { Time_year } from '@/helper/time/transform-date'
 import { UsersLoged } from '@/types/users-loged'
 import { ColumnDef } from '@tanstack/react-table'
+import Action from './action'
 
 export const columns: ColumnDef<UsersLoged>[] = [
     {
@@ -41,7 +43,34 @@ export const columns: ColumnDef<UsersLoged>[] = [
         id: 'role',
         header: 'Rol',
         cell: ({ row }) => {
-            return <div className="border">{row.original.role.name}</div>
+            return (
+                <div className="border py-1 px-2 rounded-lg w-[140px] text-center">
+                    {row.original.role.name}
+                </div>
+            )
+        },
+    },
+    {
+        id: 'companyId',
+        header: 'Empresa',
+        cell: ({ row }) => {
+            return (
+                <div className="border py-1 px-2 rounded-lg w-[140px] text-center">
+                    {row.original?.company?.name ?? '---------'}
+                </div>
+            )
+        },
+    },
+    {
+        id: 'creado',
+        header: 'Creado',
+        cell: ({ row }) => Time_year(row.original.createdAt),
+    },
+    {
+        id: 'Acciones',
+        header: '',
+        cell: ({ row }) => {
+            return <Action user={row.original ?? null} />
         },
     },
 ]

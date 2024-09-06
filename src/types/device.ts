@@ -27,9 +27,30 @@ export interface device {
     }
     area?: area
     user?: user
+    parentDevice: DeviceInformation | null
+    children: DeviceInformation[] | null
     createdAt: Date
     deletedAt?: Date
 }
+
+export type DeviceInformation = {
+    id: string
+    name: string
+    nickName: string
+    codeDevice: string
+    status: deviceStatus
+    information: {
+        type: deviceType
+        typeDevice: string
+    }
+    branch: {
+        name: string
+        company: {
+            name: string
+        }
+    }
+}
+
 
 export interface OperatingSystem {
     platform: string

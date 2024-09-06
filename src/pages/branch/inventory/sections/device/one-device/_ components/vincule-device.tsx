@@ -3,33 +3,27 @@ import { TitleBar } from './header/title-bar'
 import { MonitorSmartphone, Printer, Tag, User } from 'lucide-react'
 import { Truncate } from '@/helper/truncate-text'
 import React from 'react'
-import { deviceType } from '@/types/device'
+import { DeviceInformation, deviceStatus, deviceType } from '@/types/device'
+import { StatusDevice } from '../../_components/columns/status-state'
+import PcPrintVincule from './vincule/pc-print'
+import AreaVincule from './vincule/area'
 
 interface VinculeDeviceProps {
-    user?: {
+    user: {
         id: string
         name: string
         lastName: string
     } | null
-    area?: {
+    area: {
         id: string
         name: string
     } | null
-    device?: {
-        id: string
-        name: string
-        codeDevice: string
-        status: string
-        information: {
-            type: deviceType
-            typeDevice: string
-        }
-    } | null
+    parentDevice: DeviceInformation | null
 }
 export default function VinculeDevice({
     user,
     area,
-    device,
+    parentDevice,
 }: VinculeDeviceProps) {
     return (
         <Card>
@@ -39,7 +33,10 @@ export default function VinculeDevice({
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="h-[200px] overflow-y-auto flex flex-col gap-1">
+                <div className="h-[200px] overflow-y-auto flex flex-col gap-1.5">
+                    {parentDevice && (
+                        <PcPrintVincule parentDevice={parentDevice} />
+                    )}
                     {user && (
                         <ItemView
                             icon={<User className="w-6 h-6 mx-auto" />}
@@ -48,31 +45,9 @@ export default function VinculeDevice({
                             maxLength={15}
                         />
                     )}
-                    {area && (
-                        <ItemView
-                            icon={<Tag className="w-6 h-6 mx-auto" />}
-                            title="Area"
-                            content={area.name}
-                            maxLength={15}
-                        />
-                    )}
-                    {device && (
-                        <ItemView
-                            icon={
-                                device.information.type ==
-                                deviceType.PRINTER ? (
-                                    <Printer className="w-5 h-5 mx-auto" />
-                                ) : (
-                                    <MonitorSmartphone className="w-5 h-5" />
-                                )
-                            }
-                            title="Dispositivo"
-                            content={`${device.information.type} - ${device.information.typeDevice}`}
-                            maxLength={15}
-                        />
-                    )}
+                    {area && <AreaVincule area={area} />}
 
-                    {!user && !area && !device && (
+                    {!user && !area && !parentDevice && (
                         <div className="text-center dark:text-gray-400">
                             Sin vinculos
                         </div>
@@ -88,38 +63,27 @@ interface ItemViewProps {
     title: string
     content: string
     maxLength?: number | null
+    name
 }
 
-/**
- * 
- * @param param0  <div className="p-0.5 px-2 grid grid-cols-[25px_1fr] border rounded-lg items-center gap-4">
-                                <Printer className="w-5 h-5 mx-auto" />
-                                <div>
-                                    <h4 className=" font-medium">Impresora</h4>
-                                    <span className="text-sm">
-                                        PC-SAND/LA V-731
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="p-0.5  px-2 grid grid-cols-[25px_1fr] items-center border rounded-lg justify-between gap-4">
-                                <MonitorSmartphone className="w-5 h-5" />
-                                <div>
-                                    <h4 className=" font-medium">Pc</h4>
-                                    <span className="text-sm">
-                                        PC-SAND/LA V-731
-                                    </span>
-                                </div>
-                            </div>
- * @returns 
- */
-
-function ItemView({ icon, title, content, maxLength = null }: ItemViewProps) {
+function ItemView({
+    icon,
+    title,
+    content,
+    maxLength = null,
+    name,
+}: ItemViewProps) {
     return (
         <div>
-            <div className="p-0.5 px-2 grid grid-cols-[25px_1fr] items-center border rounded-lg gap-4">
+            <div className="p-3 px-5 grid grid-cols-[25px_1fr] items-center border rounded-lg gap-4">
                 {icon}
                 <div>
-                    <h4 className="font-medium">{title}</h4>
+                    <h4 className="font-medium">
+                        {name}{' '}
+                        <span className="ml-2 text-sm text-slate-500">
+                            {title}
+                        </span>
+                    </h4>
                     <span className="text-sm">
                         {maxLength ? (
                             <Truncate text={content} maxlength={maxLength} />

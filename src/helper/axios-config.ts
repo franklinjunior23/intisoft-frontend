@@ -7,3 +7,12 @@ export const InstanceAxios: AxiosInstance = axios.create({
         MODE === 'development' ? VITE_API_DOMAIN : VITE_API_DOMAIN_PRODUCTION,
     withCredentials: true,
 })
+
+export type Errors = {
+    message: string
+    response: {
+        data: {
+            message: string[] | string
+        }
+    }
+}

@@ -8,8 +8,9 @@ import { FitchDevice } from '../data/documents'
 import useDeviceStore from '../hoock/iddevice-data'
 import { device, deviceType } from '@/types/device'
 import PrintResume from './resume/print-resume'
-import VinculeDevice from '../_ components/vincule-device'
 import SoporteRegistre from '../_ components/soporte-device'
+import AreaVincule from '../_ components/vincule/area'
+import DeviceChildren from '../_ components/vincule/device-children'
 
 export default function ResumenDevice() {
     const { data } = useDeviceStore()
@@ -28,7 +29,7 @@ export default function ResumenDevice() {
 
 export function DesktopResume({ data }: { data: device }) {
     return (
-        <main className="grid gap-4 md:grid-cols-[45%_1fr_300px]">
+        <main className="grid gap-4 md:grid-cols-[45%_300px_1fr]">
             <div>
                 <Card>
                     <CardHeader>
@@ -182,15 +183,12 @@ export function DesktopResume({ data }: { data: device }) {
                     </CardContent>
                 </Card>
             </div>
-            <div>
-                <SoporteRegistre support={null} />
+            <div className="flex flex-col gap-4">
+                <AreaVincule area={data?.area} />
+                <DeviceChildren deviceChildren={data?.children} />
             </div>
             <div>
-                <VinculeDevice
-                    area={data.area}
-                    user={data.user}
-                    device={null}
-                />
+                <SoporteRegistre support={null} />
 
                 <Card className="h-[220px] mt-3">
                     <CardHeader>

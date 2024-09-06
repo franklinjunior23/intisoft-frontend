@@ -15,6 +15,7 @@ import { useMutation } from '@tanstack/react-query'
 import { SignIn } from '../action/sign-in.service'
 import { toast } from 'sonner'
 import { UseAuth } from '@/providers/auth.provider'
+import { UseNewUser } from '@/providers/new-user'
 
 const shemaSign = z.object({
     user: z
@@ -31,13 +32,15 @@ const shemaSign = z.object({
 
 export function FormSign() {
     const Sign = UseAuth()?.login
+    const { isRegister } = UseNewUser()
     const mutateSign = useMutation({
-        mutationKey: ['sigin'],
         mutationFn: async (data: sign) => SignIn(data),
         onSuccess: (data: data) => {
             if (!data.token) return toast.error('Error al iniciar sesion')
             if (Sign) Sign(data)
-            console.log('success')
+            if (!data.profile.name && !data.profile.lastName) {
+                isRegister(true)
+            }
         },
         onError: (err: ErrorAxios) => {
             toast.error(err?.response?.data?.message)

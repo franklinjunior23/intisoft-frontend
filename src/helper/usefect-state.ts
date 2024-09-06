@@ -12,7 +12,6 @@ interface StateData<T> {
 
 export function useFetchData<T>(url: string, config?: AxiosRequestConfig) {
     const { token } = UseAuth()
-    console.log(token)
     const [state, setState] = useState<StateData<T>>({
         data: null,
         isLoading: true,

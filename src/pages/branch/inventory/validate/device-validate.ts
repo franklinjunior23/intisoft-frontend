@@ -112,8 +112,8 @@ export const SchemaDevice = z
         codeDevice: z.string().optional(),
         status: z.nativeEnum(deviceStatus),
         dateCreated: z
-            .string() // Espera inicialmente un string
-            .transform((dateStr) => {
+            ?.string() // Espera inicialmente un string
+            ?.transform((dateStr) => {
                 // Intenta crear un objeto `Date` desde el string
                 const date = new Date(dateStr)
                 if (isNaN(date.getTime())) {

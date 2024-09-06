@@ -4,19 +4,22 @@ import { ThemeProvider } from './providers/theme.provider'
 import { ReactQueryProvider } from './providers/react-query.provider'
 import { PageIndex } from './routes'
 import { AuthProvider } from './providers/auth.provider'
+import NewUserProvider from './providers/new-user'
 
 function App() {
     return (
         <AuthProvider>
-            <ReactQueryProvider>
-                <ThemeProvider>
-                    <BrowserRouter>
-                        <PageIndex />
-                    </BrowserRouter>
+            <NewUserProvider>
+                <ReactQueryProvider>
+                    <ThemeProvider>
+                        <BrowserRouter>
+                            <PageIndex />
+                        </BrowserRouter>
 
-                    <SonnerProvider />
-                </ThemeProvider>
-            </ReactQueryProvider>
+                        <SonnerProvider />
+                    </ThemeProvider>
+                </ReactQueryProvider>
+            </NewUserProvider>
         </AuthProvider>
     )
 }

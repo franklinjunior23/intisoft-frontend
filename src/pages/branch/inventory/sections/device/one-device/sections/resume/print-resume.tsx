@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import VinculeDevice from '../../_ components/vincule-device'
 import SoporteRegistre from '../../_ components/soporte-device'
+import AreaVincule from '../../_ components/vincule/area'
+import PcPrintVincule from '../../_ components/vincule/pc-print'
 
 export default function PrintResume({ data }: { data: device }) {
     const [ViewUsers, setViewUsers] = useState<boolean>(false)
     return (
-        <main className="grid gap-3 md:grid-cols-[40%_1fr_300px]">
+        <main className="grid gap-3 md:grid-cols-[40%_300px_1fr]">
             <div>
                 <Card>
                     <CardHeader>
@@ -139,11 +141,12 @@ export default function PrintResume({ data }: { data: device }) {
                     </Card>
                 </div>
             </div>
-            <div>
-                <SoporteRegistre support={null} />
+            <div className="flex flex-col gap-4">
+                <AreaVincule area={data?.area} />
+                <PcPrintVincule parentDevice={data?.parentDevice} />
             </div>
             <div>
-                <VinculeDevice />
+                <SoporteRegistre support={null} />
             </div>
         </main>
     )

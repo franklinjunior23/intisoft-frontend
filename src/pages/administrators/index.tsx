@@ -1,11 +1,13 @@
 import { DataTable } from '@/components/shared/table'
 import { useEffect } from 'react'
 import { columns } from './_components/column'
-import { useFetchData } from '@/helper/usefect-state'
-import { UsersLoged } from '@/types/users-loged'
+
+import { GetAdministrators } from './service/getAdministrators'
+import AddUser from './_components/add-user'
 
 export default function PageUserSytem() {
-    const { data, isLoading } = useFetchData<UsersLoged[]>('auth')
+
+    const { data, isLoading } = GetAdministrators()
 
     useEffect(() => {
         const idBreadcrum = document.getElementById('breadcrumId')
@@ -24,6 +26,11 @@ export default function PageUserSytem() {
                     column: 'nameLastName',
                     placeholder: 'Buscar por nombre',
                 }}
+                childrenTab={
+                    <>
+                        <AddUser />
+                    </>
+                }
             />
         </div>
     )

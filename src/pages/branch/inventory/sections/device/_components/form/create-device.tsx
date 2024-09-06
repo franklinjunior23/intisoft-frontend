@@ -70,8 +70,6 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
         watch,
         formState: { errors },
     } = formd
-
-    console.log(errors)
     const MUTATE = useMutation({
         mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
             return await ActionCreate(data)
@@ -330,7 +328,6 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                                         <Input
                                             type="date"
                                             {...field}
-                                            value={field.value ? field.value.toISOString().split('T')[0] : ''}
                                             placeholder="Select a date"
                                         />
                                     </FormControl>

@@ -17,6 +17,7 @@ import { toast } from 'sonner'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import AddBranch from './_components/add-branch'
+import VisiteTech from './_components/add-visit-tech'
 
 export function PageCompanie() {
     const { data, isLoading } = BranchsGet()
@@ -45,6 +46,7 @@ export function PageCompanie() {
                             Sucursales : {data?.meta.quantity}
                         </Badge>
                         <AddBranch />
+                        <VisiteTech />
                     </div>
                 </footer>
             </header>
