@@ -13,6 +13,10 @@ jobs:
   build:
 
     runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
     
     steps:
     - uses: actions/checkout@v4
@@ -28,3 +32,6 @@ jobs:
       # Construir el proyecto
     - name: Build the project
       run: pnpm run build
+
+    - name: Permision Accept 
+      run: sudo chmod 777 /home/intisoft/htdocs/intisoft.com.pe/actions-runner/_work/intisoft-frontend/intisoft-frontend/dist
