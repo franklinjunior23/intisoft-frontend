@@ -15,13 +15,15 @@ export default function PageRegisterClient() {
     return (
         <main className="fixed  top-0 left-0 w-screen h-dvh grid place-content-center max-h-screen backdrop-blur-sm z-50 p-10">
             <section
-                className={cn('text-white p-12 rounded-lg bg-zinc-800', Width)}
+                className={cn('text-white p-12 rounded-lg bg-zinc-600', Width)}
             >
                 {StatesPages[CountPage]}
-                <ButtonCountPage
-                    pageCount={CountPage}
-                    setCount={setCountPage}
-                />
+                {CountPage === 0 && (
+                    <ButtonCountPage
+                        pageCount={CountPage}
+                        setCount={setCountPage}
+                    />
+                )}
             </section>
         </main>
     )

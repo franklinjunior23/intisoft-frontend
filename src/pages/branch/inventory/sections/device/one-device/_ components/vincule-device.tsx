@@ -1,10 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TitleBar } from './header/title-bar'
-import { MonitorSmartphone, Printer, Tag, User } from 'lucide-react'
+import { User } from 'lucide-react'
 import { Truncate } from '@/helper/truncate-text'
 import React from 'react'
-import { DeviceInformation, deviceStatus, deviceType } from '@/types/device'
-import { StatusDevice } from '../../_components/columns/status-state'
+import { DeviceInformation } from '@/types/device'
 import PcPrintVincule from './vincule/pc-print'
 import AreaVincule from './vincule/area'
 
@@ -39,6 +38,7 @@ export default function VinculeDevice({
                     )}
                     {user && (
                         <ItemView
+                            name={'Usuario'}
                             icon={<User className="w-6 h-6 mx-auto" />}
                             title="Usuario"
                             content={`${user.name} ${user.lastName}`}

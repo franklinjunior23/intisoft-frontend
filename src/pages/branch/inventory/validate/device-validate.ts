@@ -106,25 +106,13 @@ export const SchemaDevice = z
     .object({
         branchId: z.string(),
         userId: z.string().optional(),
-        AreaId: z.string().optional(),
+        areaId: z.string().optional(),
+        deviceId: z.string().optional(),
         name: z.string(),
         nickName: z.string(),
         codeDevice: z.string().optional(),
         status: z.nativeEnum(deviceStatus),
-        dateCreated: z
-            ?.string() // Espera inicialmente un string
-            ?.transform((dateStr) => {
-                // Intenta crear un objeto `Date` desde el string
-                const date = new Date(dateStr)
-                if (isNaN(date.getTime())) {
-                    // Si la fecha es inválida, lanza un error
-                    throw new Error('Invalid date string')
-                }
-                return date
-            })
-            .refine((date) => date instanceof Date, {
-                message: 'Expected Date',
-            }),
+        dateCreated: z.date().optional(),
         information: z.object({
             type: z.nativeEnum(deviceType),
             typeDevice: z.string(),

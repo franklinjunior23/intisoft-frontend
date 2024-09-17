@@ -45,6 +45,16 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { IdDialog } from '@/pages/branch/inventory/constants/id-dialog-device'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+import { format } from 'date-fns'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
+import FieldArea from '../../../users/_components/form/field-area'
+import { DeviceVincule } from '../../../users/_components/form/add-device'
 
 interface FormdDeviceProps {
     stateDialog: boolean
@@ -63,13 +73,7 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
         },
     })
-    const {
-        setValue,
-        getValues,
-        reset,
-        watch,
-        formState: { errors },
-    } = formd
+    const { setValue, getValues, reset, watch } = formd
     const MUTATE = useMutation({
         mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
             return await ActionCreate(data)
@@ -113,7 +117,6 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
             reset()
 
             for (const [key, value] of Object.entries(parsedData)) {
-                console.log(key)
                 setValue(key as keyof FormData, value)
             }
         }
@@ -151,109 +154,75 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
     return (
         <Form {...formd}>
             <form onSubmit={formd.handleSubmit(Submit)}>
-                <main>
-                    <div className="grid md:grid-cols-5 gap-3">
-                        <FormField
-                            name="name"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Nombre</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Nombre .."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="nickName"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Apodo</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Apodo .."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="codeDevice"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Codigo</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Codigo de equipo .."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />{' '}
-                                    {MUTATE.isPending
-                                        ? 'Guardando...'
-                                        : 'Guardar'}
-                                </FormItem>
-                            )}
-                        />
+                <main className="grid md:grid-cols-2 gap-5 overflow-y-auto">
+                    <div>
+                        <div className="grid md:grid-cols-3 gap-2">
+                            <FormField
+                                name="name"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Nombre</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Nombre .."
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="nickName"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Apodo</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Apodo .."
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="codeDevice"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Codigo</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Codigo de equipo .."
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />{' '}
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            name="information.type"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Tipo</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione el tipo del dispositivo" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {TYPES.map((type) => (
-                                                <SelectItem
-                                                    key={type}
-                                                    value={type}
-                                                >
-                                                    {type}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="information.typeDevice"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Tipo de dispositivo</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione el tipo del dispositivo" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {observerType &&
-                                                observerType.length > 0 &&
-                                                observerType.map((type) => (
+                            <FormField
+                                name="information.type"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tipo</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleccione el tipo del dispositivo" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {TYPES.map((type) => (
                                                     <SelectItem
                                                         key={type}
                                                         value={type}
@@ -261,142 +230,228 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                                                         {type}
                                                     </SelectItem>
                                                 ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name={`information.brand`}
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Marca</FormLabel>
-                                    <FormControl>
-                                        <InputDinamic
-                                            placeholder="Seleccione la marca"
-                                            data={BrandsDevice}
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name={`information.model`}
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Modelo</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            value={field.value}
-                                            placeholder="Modelo del equipo .."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name={`information.serialNumber`}
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Numero de serie</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Numero de serie .."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="dateCreated"
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Fecha de creacion</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="date"
-                                            {...field}
-                                            placeholder="Select a date"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            name="status"
-                            defaultValue={deviceStatus.ACTIVE}
-                            control={formd.control}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Estado del Dispositivo
-                                    </FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                    >
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="information.typeDevice"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Tipo de dispositivo
+                                        </FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleccione el tipo del dispositivo" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {observerType &&
+                                                    observerType.length > 0 &&
+                                                    observerType.map((type) => (
+                                                        <SelectItem
+                                                            key={type}
+                                                            value={type}
+                                                        >
+                                                            {type}
+                                                        </SelectItem>
+                                                    ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name={`information.brand`}
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Marca</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Seleccione el estado del dispositivo" />
-                                            </SelectTrigger>
+                                            <InputDinamic
+                                                placeholder="Seleccione la marca"
+                                                data={BrandsDevice}
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                            />
                                         </FormControl>
-                                        <SelectContent>
-                                            {STATUS.map((type) => (
-                                                <SelectItem
-                                                    key={type}
-                                                    value={type}
-                                                >
-                                                    {type}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name={`information.model`}
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Modelo</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                value={field.value}
+                                                placeholder="Modelo del equipo .."
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name={`information.serialNumber`}
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Numero de serie</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Numero de serie .."
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="dateCreated"
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col gap-2">
+                                        <FormLabel>
+                                            Fecha de adquisicion
+                                        </FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant={'outline'}
+                                                        className={cn(
+                                                            'w-full  text-left font-normal',
+                                                            !field.value &&
+                                                                'text-muted-foreground'
+                                                        )}
+                                                    >
+                                                        {field.value ? (
+                                                            format(
+                                                                field.value,
+                                                                'PPP'
+                                                            )
+                                                        ) : (
+                                                            <span>
+                                                                Pick a date
+                                                            </span>
+                                                        )}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                align="start"
+                                            >
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value}
+                                                    onSelect={field.onChange}
+                                                    disabled={(date) =>
+                                                        date > new Date() ||
+                                                        date <
+                                                            new Date(
+                                                                '1900-01-01'
+                                                            )
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                name="status"
+                                defaultValue={deviceStatus.ACTIVE}
+                                control={formd.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Estado del Dispositivo
+                                        </FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Seleccione el estado del dispositivo" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {STATUS.map((type) => (
+                                                    <SelectItem
+                                                        key={type}
+                                                        value={type}
+                                                    >
+                                                        {type}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="mt-3 grid grid-cols-2 gap-2 items-start">
+                            <FieldArea control={formd.control} />
+                            <DeviceVincule control={formd.control} />
+                        </div>
                     </div>
-
-                    {formd.watch('information.type') === deviceType.DESKTOP && (
-                        <PcDevice control={formd.control} watch={formd.watch} />
-                    )}
-                    {formd.watch('information.type') === deviceType.LAPTOP && (
-                        <LaptopDevice
-                            control={formd.control}
-                            watch={formd.watch}
-                        />
-                    )}
-                    {formd.watch('information.type') === deviceType.SERVER && (
-                        <ServerDevice
-                            control={formd.control}
-                            watch={formd.watch}
-                        />
-                    )}
-                    {formd.watch('information.type') === deviceType.PRINTER && (
-                        <PrintDevice
-                            control={formd.control}
-                            watch={formd.watch}
-                        />
-                    )}
-                    {formd.watch('information.type') === deviceType.RED && (
-                        <PrintDevice
-                            control={formd.control}
-                            watch={formd.watch}
-                        />
-                    )}
+                    <div className="flex flex-col md:h-[400px] overflow-y-auto">
+                        {formd.watch('information.type') ===
+                            deviceType.DESKTOP && (
+                            <PcDevice
+                                control={formd.control}
+                                watch={formd.watch}
+                            />
+                        )}
+                        {formd.watch('information.type') ===
+                            deviceType.LAPTOP && (
+                            <LaptopDevice
+                                control={formd.control}
+                                watch={formd.watch}
+                            />
+                        )}
+                        {formd.watch('information.type') ===
+                            deviceType.SERVER && (
+                            <ServerDevice
+                                control={formd.control}
+                                watch={formd.watch}
+                            />
+                        )}
+                        {formd.watch('information.type') ===
+                            deviceType.PRINTER && (
+                            <PrintDevice
+                                control={formd.control}
+                                watch={formd.watch}
+                            />
+                        )}
+                        {formd.watch('information.type') === deviceType.RED && (
+                            <PrintDevice
+                                control={formd.control}
+                                watch={formd.watch}
+                            />
+                        )}
+                    </div>
                 </main>
                 <AlertDialogFooter className="mt-5">
                     <AlertDialogCancel onClick={CancelModal}>
@@ -427,8 +482,8 @@ export function CreateDevice() {
                 </AlertDialogTrigger>
                 <AlertDialogContent
                     className={cn(
-                        'md:max-w-[950px] overflow-y-auto',
-                        'h-[85vh] lg:max-w-[1000px] '
+                        'md:max-w-[950px] overflow-y-auto max-sm:max-h-[70vh] md:overflow-y-hidden ',
+                        ' lg:max-w-[1200px] '
                     )}
                 >
                     <AlertDialogHeader>

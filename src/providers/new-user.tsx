@@ -1,11 +1,12 @@
 import PageRegisterClient from '@/components/register-client'
 import { KEY_USERNEW } from '@/constants/new-user'
 import React, { createContext, useContext, useState } from 'react'
+import { UseAuth } from './auth.provider'
 
 type newUserContext = {
     isNew: boolean
     isRegister: (state: boolean) => void
-    addDataUser: <K extends keyof UserNew>(key: K, value: UserNew[K]) => void;
+    addDataUser: <K extends keyof UserNew>(key: K, value: UserNew[K]) => void
 }
 type UserNew = {
     name: string
@@ -23,8 +24,16 @@ export default function NewUserProvider({
 }: {
     children: React.ReactNode
 }) {
+    const datosUser = UseAuth()
     const [IsNew, setIsNew] = useState<boolean>(() => {
-        return Boolean(localStorage.getItem(KEY_USERNEW)) ?? false
+        return (
+            Boolean(
+                localStorage.getItem(KEY_USERNEW) ??
+                    (datosUser?.profile?.name && datosUser?.profile?.lastName)
+                    ? false
+                    : true
+            ) ?? false
+        )
     })
     const [DataUserNew, setDataUserNew] = useState<UserNew | null>(null)
 
@@ -47,7 +56,7 @@ export default function NewUserProvider({
                 addDataUser: AddDataUser,
             }}
         >
-            {/* {IsNew && <PageRegisterClient />} */}
+            {IsNew && <PageRegisterClient />}
             {children}
         </NewUserContext.Provider>
     )

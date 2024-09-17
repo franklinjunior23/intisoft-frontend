@@ -308,47 +308,8 @@ export function FormUser({ data }: { data: user | null }) {
                             </FormItem>
                         )}
                     />
-                    {/* <FormField
-                        control={formd.control}
-                        name="area.name"
-                        render={({ field }) => {
-                            
-                            return (
-                                <FormItem>
-                                    <FormLabel>Area</FormLabel>
-                                    <InputDinamic data={dataCargo} {...field} />
-                                    <FormMessage />
-                                </FormItem>
-                            )
-                        }}
-                    /> */}
-                    {/* <FormField
-                        control={formd.control}
-                        name="area"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Area</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Seleccionar el estado del usuario" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {status.map((item) => (
-                                            <SelectItem key={item} value={item}>
-                                                {item}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    /> */}
+
+                    
                 </div>
 
                 <Button type="submit">Enviar</Button>

@@ -9,8 +9,8 @@ import NewUserProvider from './providers/new-user'
 function App() {
     return (
         <AuthProvider>
-            <NewUserProvider>
-                <ReactQueryProvider>
+            <ReactQueryProvider>
+                <NewUserProvider>
                     <ThemeProvider>
                         <BrowserRouter>
                             <PageIndex />
@@ -18,8 +18,8 @@ function App() {
 
                         <SonnerProvider />
                     </ThemeProvider>
-                </ReactQueryProvider>
-            </NewUserProvider>
+                </NewUserProvider>
+            </ReactQueryProvider>
         </AuthProvider>
     )
 }

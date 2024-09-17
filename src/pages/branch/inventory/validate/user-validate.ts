@@ -21,6 +21,7 @@ const SchemaUser = z.object({
         .optional(),
     areaId: z.string().optional(),
     branchId: z.string(),
+    deviceId: z.string().optional(),
 })
 
 export default SchemaUser

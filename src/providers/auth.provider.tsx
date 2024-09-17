@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (isLoged) {
             refrehs()
         }
-    }, [])
+    }, [isLoged])
 
     function login(data: data) {
         localStorage.setItem('isLoged', 'true')

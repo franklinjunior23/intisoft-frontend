@@ -17,7 +17,7 @@ interface PcDeviceProps {
 export function PcDevice({ control, watch }: PcDeviceProps) {
     return (
         <>
-            <div className="grid grid-cols-3 gap-3 mt-2">
+            <div className="grid gap-5 mt-2">
                 <OsItem control={control} />
                 <div>
                     <MotherboardItem control={control} />
@@ -27,7 +27,7 @@ export function PcDevice({ control, watch }: PcDeviceProps) {
                     <AnydeskItem control={control} />
                 </div>
             </div>
-            <footer className="grid grid-cols-2 gap-2">
+            <footer className="flex flex-col gap-2">
                 <GpuItem control={control} watch={watch} />
                 <RamItem control={control} />
                 <StorageItem control={control} />

@@ -40,6 +40,7 @@ import { createUser } from '../service/user.service'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { DeviceVincule } from './form/add-device'
 
 function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
     const typedoc = Object.values(typedocument)
@@ -243,19 +244,24 @@ function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
                             />
                         </div>
                     </div>
-                    <FieldsEmail
-                        control={
-                            formd.control as unknown as Control<FieldValues>
-                        }
-                    />
-                    <FieldArea
-                        control={
-                            formd.control as unknown as Control<FieldValues>
-                        }
-                    />
+                   <div className='max-h-[200px] overflow-y-auto'>
+                     <FieldsEmail
+                         control={
+                             formd.control as unknown as Control<FieldValues>
+                         }
+                     />
+                   </div>
+                    <div>
+                        <FieldArea
+                            control={
+                                formd.control as unknown as Control<FieldValues>
+                            }
+                        />
+                        <DeviceVincule control={formd.control} />
+                    </div>
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="mt-5">
                     <Button type="submit">Crear Usuarios</Button>
                     <DialogClose asChild>
                         <Button variant={'ghost'}>Cancelar</Button>
