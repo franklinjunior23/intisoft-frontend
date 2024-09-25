@@ -1,14 +1,5 @@
 import { Button } from '@/components/ui/button'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog'
-import {
     Form,
     FormControl,
     FormField,
@@ -25,12 +16,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { gender, StatusUser, typedocument } from '@/types/users'
+import { gender, StatusUser, typedocument, user } from '@/types/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircleIcon } from 'lucide-react'
 import { Control, FieldValues, useForm } from 'react-hook-form'
 import { TYPEPOST } from '../data/data.user'
-import { DialogClose } from '@radix-ui/react-dialog'
 import SchemaUser from '@/pages/branch/inventory/validate/user-validate'
 import { z } from 'zod'
 import FieldsEmail from './form/field-email'
@@ -39,10 +29,25 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createUser } from '../service/user.service'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { toast } from 'sonner'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DeviceVincule } from './form/add-device'
+import {
+    AlertDialog,
+    AlertDialogDescription,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogTitle,
+    AlertDialogHeader,
+    AlertDialogFooter,
+    AlertDialogCancel,
+} from '@/components/ui/alert-dialog'
 
-function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
+interface FormUserCreate {
+    CloseDialog: () => void
+    dataUser: user
+}
+
+export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
     const typedoc = Object.values(typedocument)
     const typegender = Object.values(gender)
     const statusUser = Object.values(StatusUser)
@@ -54,6 +59,7 @@ function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
         },
     })
+    const { setValue } = formd
 
     const CREATEUSER = useMutation({
         mutationFn: async (datos: z.infer<typeof SchemaUser>) => {
@@ -73,6 +79,13 @@ function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
     function Submit(data: z.infer<typeof SchemaUser>) {
         CREATEUSER.mutate(data)
     }
+    useEffect(() => {
+        if (dataUser) {
+            console.log('Existe dara')
+
+            setValue('areaId', dataUser?.area?.id)
+        }
+    }, [dataUser, setValue])
     return (
         <Form {...formd}>
             <form onSubmit={formd.handleSubmit(Submit)} className="w-full">
@@ -244,13 +257,13 @@ function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
                             />
                         </div>
                     </div>
-                   <div className='max-h-[200px] overflow-y-auto'>
-                     <FieldsEmail
-                         control={
-                             formd.control as unknown as Control<FieldValues>
-                         }
-                     />
-                   </div>
+                    <div className="max-h-[200px] overflow-y-auto">
+                        <FieldsEmail
+                            control={
+                                formd.control as unknown as Control<FieldValues>
+                            }
+                        />
+                    </div>
                     <div>
                         <FieldArea
                             control={
@@ -261,18 +274,22 @@ function FormUser({ CloseDialog }: { CloseDialog: () => void }) {
                     </div>
                 </div>
 
-                <DialogFooter className="mt-5">
+                <AlertDialogFooter className="mt-5">
                     <Button type="submit">Crear Usuarios</Button>
-                    <DialogClose asChild>
+                    <AlertDialogCancel asChild>
                         <Button variant={'ghost'}>Cancelar</Button>
-                    </DialogClose>
-                </DialogFooter>
+                    </AlertDialogCancel>
+                </AlertDialogFooter>
             </form>
         </Form>
     )
 }
 
-export default function AddUser() {
+export default function AddUser({
+    dataUser,
+}: {
+    dataUser: z.infer<typeof SchemaUser>
+}) {
     const [StateDialog, setStateDialog] = useState<boolean>(false)
 
     function Close() {
@@ -281,23 +298,23 @@ export default function AddUser() {
 
     return (
         <div>
-            <Dialog open={StateDialog} onOpenChange={setStateDialog}>
-                <DialogTrigger asChild>
+            <AlertDialog open={StateDialog} onOpenChange={setStateDialog}>
+                <AlertDialogTrigger asChild>
                     <Button size={'icon'}>
                         <PlusCircleIcon className="w-4 h-4" />
                     </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-[900px]">
-                    <DialogHeader>
-                        <DialogTitle>Crear Usuarios</DialogTitle>
-                        <DialogDescription>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="max-w-[900px]">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Crear Usuarios</AlertDialogTitle>
+                        <AlertDialogDescription>
                             Crear un nuevo usuario
-                        </DialogDescription>
-                    </DialogHeader>
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
 
-                    <FormUser CloseDialog={Close} />
-                </DialogContent>
-            </Dialog>
+                    <FormUser CloseDialog={Close} dataUser={dataUser} />
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     )
 }

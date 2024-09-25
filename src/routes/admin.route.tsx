@@ -26,7 +26,7 @@ export const AdminRoutes = (): routes[] => {
             icon: <LayoutDashboard className="w-5 h-5" />,
         },
         {
-            label: '/Empresas',
+            label: 'Empresas',
             icon: <Building className="w-5 h-5" />,
             children:
                 state?.map((company) => ({

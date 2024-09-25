@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { SchemaDevice } from '@/pages/branch/inventory/validate/device-validate'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -54,7 +54,7 @@ import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import FieldArea from '../../../users/_components/form/field-area'
-import { DeviceVincule } from '../../../users/_components/form/add-device'
+import AddUser from '../../../users/_components/add-user'
 
 interface FormdDeviceProps {
     stateDialog: boolean
@@ -73,17 +73,16 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
         },
     })
-    const { setValue, getValues, reset, watch } = formd
+    const { setValue, watch } = formd
     const MUTATE = useMutation({
         mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
             return await ActionCreate(data)
         },
         onSuccess: (data) => {
-            if (data.success) {
+            if (data?.success) {
                 toast.success(data.message)
                 client.refetchQueries()
-                localStorage.removeItem(LocalStorageKeys.deviceStorage)
-                reset()
+                // localStorage.removeItem(LocalStorageKeys.deviceStorage)
                 cancelModal()
             }
         },
@@ -102,41 +101,40 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
     function CancelModal() {
         if (!watch('information.type')) return
         cancelModal()
-        SaveData()
     }
 
-    const SaveData = useCallback(() => {
-        const currentData = JSON.stringify(getValues())
-        localStorage.setItem(LocalStorageKeys.deviceStorage, currentData)
-    }, [getValues])
+    // const SaveData = useCallback(() => {
+    //     const currentData = JSON.stringify(getValues())
+    //     localStorage.setItem(LocalStorageKeys.deviceStorage, currentData)
+    // }, [getValues])
 
-    useEffect(() => {
-        const savedData = localStorage.getItem(LocalStorageKeys.deviceStorage)
-        if (savedData) {
-            const parsedData: FormData = JSON.parse(savedData)
-            reset()
+    // useEffect(() => {
+    //     const savedData = localStorage.getItem(LocalStorageKeys.deviceStorage)
+    //     if (savedData) {
+    //         const parsedData: FormData = JSON.parse(savedData)
+    //         reset()
 
-            for (const [key, value] of Object.entries(parsedData)) {
-                setValue(key as keyof FormData, value)
-            }
-        }
-    }, [setValue, reset])
+    //         for (const [key, value] of Object.entries(parsedData)) {
+    //             setValue(key as keyof FormData, value)
+    //         }
+    //     }
+    // }, [setValue, reset])
 
-    useEffect(() => {
-        const handleBeforeUnload = () => {
-            const data = getValues()
-            if (data.information.type) {
-                SaveData()
-            }
-        }
+    // useEffect(() => {
+    //     const handleBeforeUnload = () => {
+    //         const data = getValues()
+    //         if (data.information.type) {
+    //             SaveData()
+    //         }
+    //     }
 
-        window.addEventListener('beforeunload', handleBeforeUnload)
+    //     window.addEventListener('beforeunload', handleBeforeUnload)
 
-        // Cleanup
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload)
-        }
-    }, [getValues, SaveData])
+    //     // Cleanup
+    //     return () => {
+    //         window.removeEventListener('beforeunload', handleBeforeUnload)
+    //     }
+    // }, [getValues, SaveData])
     useEffect(() => {
         if (stateDialog) {
             const savedData = localStorage.getItem(
@@ -413,7 +411,8 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                         </div>
                         <div className="mt-3 grid grid-cols-2 gap-2 items-start">
                             <FieldArea control={formd.control} />
-                            <DeviceVincule control={formd.control} />
+                            {/* <DeviceVincule control={formd.control} /> */}
+                            <AddUser />
                         </div>
                     </div>
                     <div className="flex flex-col md:h-[400px] overflow-y-auto">

@@ -15,6 +15,7 @@ import {
 import { GetDevice } from '@/pages/branch/action/device-actiion.service'
 import { Control, FieldValues } from 'react-hook-form'
 import { CreateDevice } from '../../../device/_components/form/create-device'
+import { device } from '@/types/device'
 
 export interface deviceId {
     deviceId: string
@@ -45,10 +46,11 @@ export function DeviceVincule({ control }: { control: Control<FieldValues> }) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {data?.data.map((device) => (
+                                    {data?.data.map((device: device) => (
                                         <SelectItem
                                             key={device.id}
                                             value={device.id}
+                                            disabled={Boolean(device.user)}
                                         >
                                             {device.name}
                                         </SelectItem>

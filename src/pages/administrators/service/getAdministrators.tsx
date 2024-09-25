@@ -9,7 +9,6 @@ export function GetAdministrators() {
     return useQuery<UsersLoged[]>({
         queryKey: [KeyQuerys.getAdministrators],
         queryFn: async () => {
-            console.log(token)
             const { data } = await InstanceAxios.get('/auth', {
                 headers: {
                     Authorization: `Bearer ${token}`,

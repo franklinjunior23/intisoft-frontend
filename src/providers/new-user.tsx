@@ -29,9 +29,9 @@ export default function NewUserProvider({
         return (
             Boolean(
                 localStorage.getItem(KEY_USERNEW) ??
-                    (datosUser?.profile?.name && datosUser?.profile?.lastName)
-                    ? false
-                    : true
+                    (!datosUser?.profile?.name && !datosUser?.profile?.lastName)
+                    ? true
+                    : false
             ) ?? false
         )
     })
@@ -56,7 +56,7 @@ export default function NewUserProvider({
                 addDataUser: AddDataUser,
             }}
         >
-            {IsNew && <PageRegisterClient />}
+            {/* {IsNew && <PageRegisterClient />} */}
             {children}
         </NewUserContext.Provider>
     )

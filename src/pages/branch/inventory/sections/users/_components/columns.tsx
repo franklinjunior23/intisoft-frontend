@@ -9,11 +9,12 @@ import {
 import { Time_year } from '@/helper/time/transform-date'
 import { cn } from '@/lib/utils'
 import { StatusUser, user } from '@/types/users'
-import { CaretSortIcon } from '@radix-ui/react-icons'
+import { CaretSortIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { ColumnDef } from '@tanstack/react-table'
 import { PersonStanding } from 'lucide-react'
 import { EditUser } from './edit-user'
 import { CheckedState } from '@radix-ui/react-checkbox'
+import EditOneUser from './edituser'
 
 export const columns: ColumnDef<user>[] = [
     {
@@ -22,7 +23,8 @@ export const columns: ColumnDef<user>[] = [
             <Checkbox
                 checked={
                     table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && 'indeterminate') as CheckedState
+                    ((table.getIsSomePageRowsSelected() &&
+                        'indeterminate') as CheckedState)
                 }
                 onCheckedChange={(value) =>
                     table.toggleAllPageRowsSelected(!!value)
@@ -191,7 +193,12 @@ export const columns: ColumnDef<user>[] = [
     {
         id: 'actions',
         header: '',
-        cell: ({ row }) => <EditUser data={row.original} />,
+        cell: ({ row }) => (
+            <div className="flex justify-center items-center">
+                <EditUser data={row.original} />
+                <EditOneUser id={row.original.id} />
+            </div>
+        ),
         enableSorting: false,
         enableHiding: false,
     },
