@@ -79,8 +79,7 @@ export function PublicRoutes() {
 }
 
 export function MidlewareRoute() {
-    const profile = UseAuth()?.profile
-
+    const profile = UseAuth()?.profile   
     return (
         <>
             {profile?.role === ROLE.ADMIN && <ClientRoutes />}

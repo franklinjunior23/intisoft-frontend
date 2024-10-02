@@ -54,7 +54,7 @@ import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import FieldArea from '../../../users/_components/form/field-area'
-import AddUser from '../../../users/_components/add-user'
+import VinculeUser from '../../../users/_components/vincule-user'
 
 interface FormdDeviceProps {
     stateDialog: boolean
@@ -151,7 +151,13 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
 
     return (
         <Form {...formd}>
-            <form onSubmit={formd.handleSubmit(Submit)}>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    formd.handleSubmit(Submit)()
+                }}
+            >
                 <main className="grid md:grid-cols-2 gap-5 overflow-y-auto">
                     <div>
                         <div className="grid md:grid-cols-3 gap-2">
@@ -412,7 +418,7 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                         <div className="mt-3 grid grid-cols-2 gap-2 items-start">
                             <FieldArea control={formd.control} />
                             {/* <DeviceVincule control={formd.control} /> */}
-                            <AddUser />
+                            <VinculeUser control={formd.control} />
                         </div>
                     </div>
                     <div className="flex flex-col md:h-[400px] overflow-y-auto">

@@ -74,12 +74,12 @@ export function PageCompanie() {
                         </CardHeader>
                         <CardContent className=" p-">
                             <div className="flex justify-between items-center text-sm">
-                                <Truncate text={branch.token} maxlength={25} />
+                                <Truncate text={branch.id} maxlength={25} />
                                 <Button
                                     size={'icon'}
                                     onClick={() => {
                                         navigator.clipboard.writeText(
-                                            branch.token
+                                            branch.id
                                         )
                                         toast.success('Token copiado')
                                     }}

@@ -5,6 +5,9 @@ export function Truncate({
     text: string
     maxlength: number
 }) {
-    if (!text) throw new Error('Text is required')
+    if (!text) {
+        console.error('Text is required')
+        text = 'Value not found'
+    }
     return text.length > maxlength ? text.slice(0, maxlength) + '...' : text
 }

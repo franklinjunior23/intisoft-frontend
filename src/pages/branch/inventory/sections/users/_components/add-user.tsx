@@ -44,7 +44,7 @@ import {
 
 interface FormUserCreate {
     CloseDialog: () => void
-    dataUser: user
+    dataUser: user | null
 }
 
 export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
@@ -81,14 +81,24 @@ export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
     }
     useEffect(() => {
         if (dataUser) {
-            console.log('Existe dara')
+            setValue('name', dataUser.name)
+            setValue('lastName', dataUser.lastName)
+            // setValue('document.type', dataUser.document.type as typedocument)
+            setValue('document.number', dataUser.document.number)
 
             setValue('areaId', dataUser?.area?.id)
         }
     }, [dataUser, setValue])
     return (
         <Form {...formd}>
-            <form onSubmit={formd.handleSubmit(Submit)} className="w-full">
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    formd.handleSubmit(Submit)()
+                }}
+                className="w-full"
+            >
                 <div className="grid md:grid-cols-2 gap-2 items-start">
                     <div className="grid grid-cols-2 gap-y-3 gap-2">
                         <FormField
@@ -285,11 +295,7 @@ export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
     )
 }
 
-export default function AddUser({
-    dataUser,
-}: {
-    dataUser: z.infer<typeof SchemaUser>
-}) {
+export default function AddUser() {
     const [StateDialog, setStateDialog] = useState<boolean>(false)
 
     function Close() {
@@ -312,7 +318,7 @@ export default function AddUser({
                         </AlertDialogDescription>
                     </AlertDialogHeader>
 
-                    <FormUser CloseDialog={Close} dataUser={dataUser} />
+                    <FormUser CloseDialog={Close} dataUser={null} />
                 </AlertDialogContent>
             </AlertDialog>
         </div>

@@ -42,7 +42,7 @@ export function CpuItem({ control }: CpuItemProps) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value={'Amd'}>AMD</SelectItem>
+                                    <SelectItem value={'AMD'}>AMD</SelectItem>
                                     <SelectItem value={'Intel'}>
                                         Intel
                                     </SelectItem>

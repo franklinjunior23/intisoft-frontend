@@ -14,12 +14,15 @@ import DeviceChildren from '../_ components/vincule/device-children'
 
 export default function ResumenDevice() {
     const { data } = useDeviceStore()
+    if (!data) return <div>Loading...</div>
     return (
         <main>
-            {data?.information.type ===
-                (deviceType.DESKTOP ||
-                    deviceType.LAPTOP ||
-                    deviceType.SERVER) && <DesktopResume data={data} />}
+            {(data?.information.type === deviceType.DESKTOP ||
+                data?.information.type === deviceType.LAPTOP ||
+                data?.information.type === deviceType.SERVER) && (
+                <DesktopResume data={data} />
+            )}
+
             {data?.information.type == deviceType.PRINTER && (
                 <PrintResume data={data} />
             )}
@@ -28,6 +31,7 @@ export default function ResumenDevice() {
 }
 
 export function DesktopResume({ data }: { data: device }) {
+    console.log(data)
     return (
         <main className="grid gap-4 md:grid-cols-[45%_300px_1fr]">
             <div>
@@ -51,6 +55,7 @@ export function DesktopResume({ data }: { data: device }) {
                                     </span>
                                 </div>
                             </div>
+
                             <div className="mt-5 flex  gap-4 flex-wrap  justify-between">
                                 <div>
                                     <TitleSection title="Version" />
@@ -105,19 +110,22 @@ export function DesktopResume({ data }: { data: device }) {
                                 <TitleSection title="Model" />
                                 <span>
                                     <Truncate
-                                        text={data.information.model}
+                                        text={
+                                            data.information.model ??
+                                            'No Registrado'
+                                        }
                                         maxlength={12}
                                     />
                                 </span>
                             </div>
                             <div>
                                 <TitleSection title="Cantidad de Ram" />
-                                <span>{data.details.ram?.length} </span>
+                                <span>{data.details?.ram?.length} </span>
                             </div>
                             <div>
                                 <TitleSection title="Ram" />
                                 <span>
-                                    {data.details.ram?.reduce(
+                                    {data.details?.ram?.reduce(
                                         (total, current) =>
                                             total + Number(current.capacity),
                                         0
@@ -129,7 +137,7 @@ export function DesktopResume({ data }: { data: device }) {
                                 <TitleSection title="Procesador" />
                                 <span>
                                     <Truncate
-                                        text={`${data.details.cpu.brand}  - ${data.details.cpu.model}`}
+                                        text={`${data.details?.cpu.brand}  - ${data.details?.cpu.model}`}
                                         maxlength={10}
                                     />
                                 </span>
@@ -163,7 +171,7 @@ export function DesktopResume({ data }: { data: device }) {
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-wrap gap-2">
-                            {data.details.storage?.map((item, index) => (
+                            {data.details?.storage?.map((item, index) => (
                                 <div
                                     className="border rounded-md p-1.5 px-3 flex justify-between items-center gap-3"
                                     key={index}
