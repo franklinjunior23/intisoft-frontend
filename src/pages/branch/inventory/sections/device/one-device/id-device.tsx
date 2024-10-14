@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Laptop, MonitorSmartphone, Printer, Share2 } from 'lucide-react'
 import HeaderDevice from './_ components/header/header'
 import useDeviceStore from './hoock/iddevice-data'
+import { StatusDevice } from '../_components/columns/status-state'
 
 export default function DeviceOne() {
     const { setDevice } = useDeviceStore()
@@ -81,12 +82,17 @@ export default function DeviceOne() {
                             <Laptop className="w-12 h-12" />
                         )}
                     </div>
-                    <div>
-                        <h3 className="text-">
-                            {data?.name} - {data?.nickName}
-                        </h3>
-                        <h3 className="text-sm">{data?.codeDevice}</h3>
-                    </div>
+                    <main className=" w-full flex justify-between items-center">
+                        <div>
+                            <h3 className="text-">
+                                {data?.name} - {data?.nickName}
+                            </h3>
+                            <h3 className="text-sm">{data?.codeDevice}</h3>
+                        </div>
+                        <div>
+                            <StatusDevice status={data!.status} />
+                        </div>
+                    </main>
                 </CardContent>
             </Card>
             <HeaderDevice type={data!.information.type!} />

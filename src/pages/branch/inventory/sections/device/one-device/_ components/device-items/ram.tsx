@@ -9,7 +9,7 @@ interface RamItemProps {
 
 export default function RamItem({ ram }: RamItemProps) {
     return (
-        <Card className="w-full md:w-[550px]">
+        <Card className="">
             <CardHeader>
                 <CardTitle>
                     <TitleBar title="Modulos de ram" />

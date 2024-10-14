@@ -62,7 +62,6 @@ export function ClientRoutes() {
                     path=":company/:branch/usuarios/:userId"
                     element={<PageUserOne />}
                 />
-                // ADMIN
                 <Route path="user-system" element={<PageUserSytem />} />
             </Route>
         </Routes>
@@ -79,7 +78,7 @@ export function PublicRoutes() {
 }
 
 export function MidlewareRoute() {
-    const profile = UseAuth()?.profile   
+    const profile = UseAuth()?.profile
     return (
         <>
             {profile?.role === ROLE.ADMIN && <ClientRoutes />}

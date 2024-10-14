@@ -11,6 +11,7 @@ import PrintResume from './resume/print-resume'
 import SoporteRegistre from '../_ components/soporte-device'
 import AreaVincule from '../_ components/vincule/area'
 import DeviceChildren from '../_ components/vincule/device-children'
+import Linux from '@/components/icons/so/linux-icon'
 
 export default function ResumenDevice() {
     const { data } = useDeviceStore()
@@ -31,7 +32,6 @@ export default function ResumenDevice() {
 }
 
 export function DesktopResume({ data }: { data: device }) {
-    console.log(data)
     return (
         <main className="grid gap-4 md:grid-cols-[45%_300px_1fr]">
             <div>
@@ -44,7 +44,11 @@ export function DesktopResume({ data }: { data: device }) {
                     <CardContent className="">
                         <div>
                             <div className="flex  justify-start items-center gap-10 mt-3">
-                                <Windows className="w-12 h-12 " />
+                                {data.details.os?.platform == 'linux' ? (
+                                    <Linux className="w-12 h-12 " />
+                                ) : (
+                                    <Windows className="w-12 h-12 " />
+                                )}
                                 <div>
                                     <h4 className="text-xs">
                                         {data.details.os?.platform}
@@ -55,12 +59,11 @@ export function DesktopResume({ data }: { data: device }) {
                                     </span>
                                 </div>
                             </div>
-
                             <div className="mt-5 flex  gap-4 flex-wrap  justify-between">
                                 <div>
                                     <TitleSection title="Version" />
                                     <span className="text-sm">
-                                        {data.details.os?.build}
+                                        {data.details.os?.release}
                                     </span>
                                 </div>
                                 <div>
@@ -72,7 +75,7 @@ export function DesktopResume({ data }: { data: device }) {
                                 <div>
                                     <TitleSection title="Kernel" />
                                     <span className="text-sm">
-                                        {data.details.os?.release}
+                                        {data.details.os?.kernel}
                                     </span>
                                 </div>
                                 <div>
@@ -171,22 +174,27 @@ export function DesktopResume({ data }: { data: device }) {
                     </CardHeader>
                     <CardContent>
                         <div className="flex flex-wrap gap-2">
-                            {data.details?.storage?.map((item, index) => (
-                                <div
-                                    className="border rounded-md p-1.5 px-3 flex justify-between items-center gap-3"
-                                    key={index}
-                                >
-                                    <Server className="w-7 h-7" />
-                                    <div>
-                                        <h4 className="text-xs">
-                                            {item.type} - {item.brand}
-                                        </h4>
-                                        <span className="text-xs">
-                                            {item.capacity} gb
-                                        </span>
+                            {data.details?.storage?.map((item, index) => {
+                                const gb = item.capacity.toString().slice(0, 3)
+
+                                return (
+                                    <div
+                                        className="border rounded-md p-1.5 px-3 flex justify-between items-center gap-3"
+                                        key={index}
+                                    >
+                                        <Server className="w-7 h-7" />
+                                        <div>
+                                            <h4 className="text-xs">
+                                                {item.type} -{' '}
+                                                {item.brand ?? 'No Registrado'}
+                                            </h4>
+                                            <span className="text-xs">
+                                                {gb} gb
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                     </CardContent>
                 </Card>

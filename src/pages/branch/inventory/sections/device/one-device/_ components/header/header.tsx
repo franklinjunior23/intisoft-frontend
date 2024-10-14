@@ -16,10 +16,7 @@ export default function HeaderDevice({ type }: { type: deviceType }) {
                     <TabsTrigger asChild value="undefined">
                         <Link to={resumePath}>Resumen</Link>
                     </TabsTrigger>
-                    {type ==
-                        (deviceType.DESKTOP ||
-                            deviceType.LAPTOP ||
-                            deviceType.SERVER)}
+
                     <TabsTrigger value="hardware" asChild>
                         <Link to={'hardware'}>Hardware</Link>
                     </TabsTrigger>

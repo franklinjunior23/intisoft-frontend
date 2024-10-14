@@ -19,15 +19,13 @@ export default function MotherboardItem({
             <CardContent className="flex  items-center">
                 <MotherboardIcon className="w-20 h-20  mx-auto md:mx-10" />
                 <main className="flex flex-col gap-2">
-                    <div className="flex justify-between">
-                        <div>
-                            <TitleSection title="Marca" />
-                            <span>{brand}</span>
-                        </div>
-                        <div>
-                            <TitleSection title="Modelo" />
-                            <span>{model}</span>
-                        </div>
+                    <div>
+                        <TitleSection title="Marca" />
+                        <span>{brand}</span>
+                    </div>
+                    <div>
+                        <TitleSection title="Modelo" />
+                        <span>{model}</span>
                     </div>
                     <div>
                         <TitleSection title="Tipo de Socket " />

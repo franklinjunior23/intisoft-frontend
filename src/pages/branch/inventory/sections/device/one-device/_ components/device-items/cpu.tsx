@@ -13,23 +13,22 @@ export default function CpuItem({ brand, cores, model, threads }: CpuTypes) {
             </CardHeader>
             <CardContent className="flex  h-[65%] pb-12 justify-around items-center">
                 <Cpu strokeWidth={1.1} className="w-16 h-20  md:mx-10" />
-                <main className="flex flex-col w-[45%] md:w-[35%] gap-1">
-                    <div className="flex justify-between">
-                        <div>
-                            <TitleSection title="Marca" />
-                            <span>{brand}</span>
-                        </div>
-                        <div>
-                            <TitleSection title="Modelo" />
-                            <span>{model}</span>
-                        </div>
+                <main className="flex flex-col  gap-1">
+                    <div>
+                        <TitleSection title="Modelo" />
+                        <span>{model}</span>
                     </div>
+                    <div>
+                        <TitleSection title="Marca" />
+                        <span>{brand}</span>
+                    </div>
+                    <div className="flex justify-between"></div>
                     <div className="flex justify-between  items-start">
-                        <div>
+                        <div className="w-1/2">
                             <TitleSection title="Nucleos" />
                             <span>{cores}</span>
                         </div>
-                        <div>
+                        <div className="w-1/2">
                             <TitleSection title="Hilos" />
                             <span>{threads}</span>
                         </div>

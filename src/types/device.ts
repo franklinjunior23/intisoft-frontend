@@ -51,6 +51,10 @@ export type DeviceInformation = {
     }
 }
 
+export interface AnydeskTypes {
+    id: string
+    password?: string
+}
 
 export interface OperatingSystem {
     platform: string
@@ -93,7 +97,7 @@ export interface Ram {
 export interface Storage {
     brand: string
     model: string
-    capacity: string
+    capacity: number
     type: string
 }
 
