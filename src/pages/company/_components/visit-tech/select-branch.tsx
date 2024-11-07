@@ -21,9 +21,8 @@ interface SelectBranchProps {
     watch: (name: string) => string
 }
 
-export default function SelectBranch({ control, watch }: SelectBranchProps) {
-    const { data, isLoading, isError } = BranchsGet()
-    console.log(watch('companyId'))
+export default function SelectBranch({ control }: SelectBranchProps) {
+    const { data, isLoading } = BranchsGet()
     if (isLoading) return <Skeleton className="w-full h-3" />
     return (
         <FormField

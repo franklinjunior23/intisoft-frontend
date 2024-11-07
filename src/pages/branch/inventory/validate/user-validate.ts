@@ -1,6 +1,7 @@
 import { StatusUser } from '@/types/users'
 import { z } from 'zod'
 const SchemaUser = z.object({
+    
     name: z.string().min(3),
     lastName: z.string().min(3),
     gender: z.enum(['Femenino', 'Masculino']),

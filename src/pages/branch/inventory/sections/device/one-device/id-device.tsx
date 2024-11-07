@@ -9,6 +9,7 @@ import { Laptop, MonitorSmartphone, Printer, Share2 } from 'lucide-react'
 import HeaderDevice from './_ components/header/header'
 import useDeviceStore from './hoock/iddevice-data'
 import { StatusDevice } from '../_components/columns/status-state'
+import { EditDevice } from '../_components/form/edit-device'
 
 export default function DeviceOne() {
     const { setDevice } = useDeviceStore()
@@ -89,7 +90,8 @@ export default function DeviceOne() {
                             </h3>
                             <h3 className="text-sm">{data?.codeDevice}</h3>
                         </div>
-                        <div>
+                        <div className="flex gap-4 items-start">
+                            <EditDevice />
                             <StatusDevice status={data!.status} />
                         </div>
                     </main>

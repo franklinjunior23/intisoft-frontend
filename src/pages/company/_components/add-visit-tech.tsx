@@ -10,11 +10,12 @@ import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
 import FormVisit from './visit-tech/form'
+import SectionVisit from './use-section-visit'
 
 export default function VisiteTech() {
     const [StateDialog, setStateDialog] = useState<boolean>(false)
     return (
-        <AlertDialog open={StateDialog}>
+        <AlertDialog open={StateDialog} onOpenChange={setStateDialog}>
             <AlertDialogTrigger asChild>
                 <Button
                     onClick={() => {
@@ -24,7 +25,7 @@ export default function VisiteTech() {
                     <PlusCircle className="mr-2 size-4" /> Visita Tecnica
                 </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="md:max-w-[700px]">
+            <AlertDialogContent className="md:max-w-[900px]">
                 <AlertDialogHeader>
                     <AlertDialogTitle>
                         Registrar una visita tecnica
@@ -34,7 +35,7 @@ export default function VisiteTech() {
                         a la sucursal seleccionada en el sistema.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <FormVisit />
+                <SectionVisit />
             </AlertDialogContent>
         </AlertDialog>
     )

@@ -14,12 +14,14 @@ import {
 } from '@/components/ui/select'
 import { Control } from 'react-hook-form'
 import AddUser from './add-user'
+import { GetUsers } from '@/pages/branch/action/users-action.service'
 
 interface VinculeUserProps {
     control: Control
 }
 
 export default function VinculeUser({ control }: VinculeUserProps) {
+    const { isLoading, data } = GetUsers()
     return (
         <div>
             <h3 className="text-lg font-medium mb-2">Usuario</h3>
@@ -40,15 +42,20 @@ export default function VinculeUser({ control }: VinculeUserProps) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="m@example.com">
-                                        m@example.com
-                                    </SelectItem>
-                                    <SelectItem value="m@google.com">
-                                        m@google.com
-                                    </SelectItem>
-                                    <SelectItem value="m@support.com">
-                                        m@support.com
-                                    </SelectItem>
+                                    {isLoading ? (
+                                        <SelectItem value="loading">
+                                            Cargando...
+                                        </SelectItem>
+                                    ) : (
+                                        data?.data?.map((user) => (
+                                            <SelectItem
+                                                key={user.id}
+                                                value={user.id}
+                                            >
+                                                {user.name} - {user.lastName}
+                                            </SelectItem>
+                                        ))
+                                    )}
                                 </SelectContent>
                             </Select>
                             <FormMessage />

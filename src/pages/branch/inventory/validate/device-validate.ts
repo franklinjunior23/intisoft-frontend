@@ -104,6 +104,7 @@ export const SchemaDetailsDevice = z.object({
 })
 export const SchemaDevice = z
     .object({
+        id: z.string().optional(),
         branchId: z.string(),
         userId: z.string().optional(),
         areaId: z.string().optional(),

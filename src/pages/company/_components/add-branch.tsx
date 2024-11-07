@@ -51,7 +51,13 @@ function FormBranch() {
     }
     return (
         <Form {...formd}>
-            <form onSubmit={formd.handleSubmit(onSubmit)}>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    formd.handleSubmit(onSubmit)()
+                }}
+            >
                 <FormField
                     control={formd.control}
                     name="name"

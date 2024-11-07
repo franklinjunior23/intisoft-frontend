@@ -78,9 +78,7 @@ export function PageCompanie() {
                                 <Button
                                     size={'icon'}
                                     onClick={() => {
-                                        navigator.clipboard.writeText(
-                                            branch.id
-                                        )
+                                        navigator.clipboard.writeText(branch.id)
                                         toast.success('Token copiado')
                                     }}
                                     variant={'secondary'}
@@ -94,6 +92,7 @@ export function PageCompanie() {
                         </CardFooter>
                     </Card>
                 ))}
+                {data?.data.branchs?.length === 0 && <h1>No hay sucursales</h1>}
             </article>
         </main>
     )

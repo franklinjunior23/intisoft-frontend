@@ -14,6 +14,7 @@ import DeviceOne from './pages/branch/inventory/sections/device/one-device/id-de
 import ResumenDevice from './pages/branch/inventory/sections/device/one-device/sections/device-resumen'
 import { PageHardware } from './pages/branch/inventory/sections/device/one-device/sections/hardware'
 import PageUserSytem from './pages/administrators'
+import PageKnowledge from './pages/knowledge/page'
 
 export function ClientCompany() {
     return (
@@ -63,6 +64,7 @@ export function ClientRoutes() {
                     element={<PageUserOne />}
                 />
                 <Route path="user-system" element={<PageUserSytem />} />
+                <Route path="knowledge" element={<PageKnowledge />} />
             </Route>
         </Routes>
     )

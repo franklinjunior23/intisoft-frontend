@@ -21,7 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { deviceStatus, deviceType } from '@/types/device'
+import { device, deviceStatus, deviceType } from '@/types/device'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { PcDevice } from '../devices/pc-device'
 import { deviceTypeOptions } from '../../constants/types-device'
@@ -55,25 +55,101 @@ import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import FieldArea from '../../../users/_components/form/field-area'
 import VinculeUser from '../../../users/_components/vincule-user'
+import { PutDevice } from '../../service/update-device'
 
 interface FormdDeviceProps {
     stateDialog: boolean
     cancelModal: () => void
+    dataDevice: device | null
 }
 
-function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
+export function FormDevice({
+    stateDialog,
+    cancelModal,
+    dataDevice,
+}: FormdDeviceProps) {
     const client = useQueryClient()
     type FormData = z.infer<typeof SchemaDevice>
+
+    const MUTATEUPDATE = PutDevice({})
 
     const STATUS = Object.values(deviceStatus)
     const TYPES = Object.values(deviceType)
     const formd = useForm<z.infer<typeof SchemaDevice>>({
         resolver: zodResolver(SchemaDevice),
         defaultValues: {
+            id: dataDevice?.id,
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
+            information: {
+                type: dataDevice?.information.type,
+                typeDevice: dataDevice?.information.typeDevice,
+                brand: dataDevice?.information.brand,
+                model: dataDevice?.information.model,
+            },
+            dateCreated: dataDevice?.dateCreated
+                ? new Date(dataDevice.dateCreated)
+                : new Date(),
+            areaId: dataDevice?.area?.id ? String(dataDevice.area.id) : '',
+            userId: dataDevice?.user?.id ? String(dataDevice?.user?.id) : '',
+            codeDevice: dataDevice?.codeDevice,
+            os: {
+                platform: dataDevice?.details.os?.platform,
+                architecture: dataDevice?.details.os?.architecture,
+                distro: dataDevice?.details.os?.distro,
+                serial: dataDevice?.details.os?.serial,
+                uefi: dataDevice?.details.os?.uefi,
+                build: dataDevice?.details.os?.build,
+                fqdn: dataDevice?.details.os?.fqdn,
+                kernel: dataDevice?.details.os?.kernel,
+                release: dataDevice?.details.os?.release,
+            },
+            motherboard: {
+                brand: dataDevice?.details.motherboard?.brand,
+                model: dataDevice?.details.motherboard?.model,
+                quantitySlots: dataDevice?.details.motherboard?.quantitySlots,
+                socket: dataDevice?.details.motherboard?.socket,
+            },
+            cpu: {
+                brand: dataDevice?.details.cpu?.brand,
+                model: dataDevice?.details.cpu?.model,
+                cores: String(dataDevice?.details.cpu?.cores),
+                threads: String(dataDevice?.details.cpu?.threads),
+            },
+            anydesk: {
+                id: dataDevice?.anydesk?.id,
+                password: dataDevice?.anydesk?.password,
+            },
+            gpu:
+                dataDevice?.details?.graphic.map((gpu) => ({
+                    ...gpu,
+                    brand: gpu.brand,
+                    model: gpu.model,
+                    vram: String(gpu.vram),
+                })) ?? [],
+            ram:
+                dataDevice?.details.ram?.map((ram) => ({
+                    ...ram,
+                    speed: String(ram.speed),
+                    capacity: String(ram.capacity),
+                })) ?? [],
+            storage:
+                dataDevice?.details.storage?.map((storage) => ({
+                    ...storage,
+                    capacity: String(storage.capacity),
+                })) ?? [],
+            network: dataDevice?.details.network?.map((net) => ({
+                ...net,
+                mac: net.mac ?? '0',
+                speed: String(net.speed) ?? '0',
+            })),
         },
     })
-    const { setValue, watch } = formd
+    const {
+        setValue,
+        watch,
+        formState: { errors },
+    } = formd
+    console.log(errors)
     const MUTATE = useMutation({
         mutationFn: async (data: z.infer<typeof SchemaDevice>) => {
             return await ActionCreate(data)
@@ -95,13 +171,31 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
         deviceTypeOptions[formd.watch('information.type') ?? '']
 
     function Submit(data: z.infer<typeof SchemaDevice>) {
-        MUTATE.mutate(data)
+        if (!dataDevice) {
+            MUTATE.mutate(data)
+        }
+
+        MUTATEUPDATE.mutate(data)
     }
 
     function CancelModal() {
         if (!watch('information.type')) return
         cancelModal()
     }
+
+    useEffect(() => {
+        if (dataDevice) {
+            for (const [key, value] of Object.entries(dataDevice)) {
+                setValue(key as keyof FormData, value)
+            }
+            console.log(dataDevice)
+            setValue('information.type', dataDevice.information.type)
+            setValue(
+                'information.typeDevice',
+                dataDevice.information.typeDevice
+            )
+        }
+    }, [dataDevice, setValue])
 
     // const SaveData = useCallback(() => {
     //     const currentData = JSON.stringify(getValues())
@@ -373,7 +467,6 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                                                                 '1900-01-01'
                                                             )
                                                     }
-                                                    initialFocus
                                                 />
                                             </PopoverContent>
                                         </Popover>
@@ -464,7 +557,16 @@ function FormDevice({ stateDialog, cancelModal }: FormdDeviceProps) {
                     </AlertDialogCancel>
 
                     <Button type="submit" disabled={MUTATE.isPending}>
-                        {MUTATE.isPending ? 'Guardando...' : 'Guardar'}
+                        {dataDevice ? (
+                            <>
+                                {' '}
+                                {MUTATEUPDATE.isPending
+                                    ? 'Actualizando ...'
+                                    : 'Actualizar'}{' '}
+                            </>
+                        ) : (
+                            <>{MUTATE.isPending ? 'Guardando...' : 'Guardar'}</>
+                        )}
                     </Button>
                 </AlertDialogFooter>
             </form>
@@ -498,6 +600,7 @@ export function CreateDevice() {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <FormDevice
+                        dataDevice={null}
                         cancelModal={CloseModal}
                         stateDialog={StateDialog}
                     />

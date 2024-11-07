@@ -1,4 +1,4 @@
-import { Building, LayoutDashboard, Users } from 'lucide-react'
+import { BookIcon, Building, LayoutDashboard, Users } from 'lucide-react'
 import { routes } from '@/types/routes'
 import { useStateCompany } from '@/states/company.state'
 import { useQueryClient, InvalidateQueryFilters } from '@tanstack/react-query' // Import InvalidateQueryFilters
@@ -39,6 +39,11 @@ export const AdminRoutes = (): routes[] => {
             href: '/user-system',
             label: 'Usuarios',
             icon: <Users className="w-5 h-5" />,
+        },
+        {
+            href: '/knowledge',
+            label: 'Conocimiento',
+            icon: <BookIcon className="w-5 h-5" />,
         },
     ]
 }

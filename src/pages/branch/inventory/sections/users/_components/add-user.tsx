@@ -16,7 +16,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { gender, StatusUser, typedocument, user } from '@/types/users'
+import { gender, StatusUser, user } from '@/types/users'
+
+const typedocument = {
+    Dni: 'Dni',
+    passport: 'passport',
+    docExtanjero: 'docExtanjero',
+    ruc: 'ruc',
+} as const
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PlusCircleIcon } from 'lucide-react'
 import { Control, FieldValues, useForm } from 'react-hook-form'
@@ -26,10 +33,10 @@ import { z } from 'zod'
 import FieldsEmail from './form/field-email'
 import FieldArea from './form/field-area'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createUser } from '../service/user.service'
+import { createUser, UpdateUser } from '../service/user.service'
 import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { toast } from 'sonner'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { DeviceVincule } from './form/add-device'
 import {
     AlertDialog,
@@ -52,14 +59,43 @@ export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
     const typegender = Object.values(gender)
     const statusUser = Object.values(StatusUser)
     const client = useQueryClient()
+    const { mutate: UPDATEUSER, isPending: PENDINGUPDATE } = UpdateUser(
+        dataUser?.id ?? '',
+        {
+            onSuccess: (data) => {
+                if (!data.success)
+                    return toast.info(
+                        data.message ?? 'Error al actualizar un usuario '
+                    )
+                toast.success(data.message)
+                client.refetchQueries()
+                CloseDialog()
+            },
+            onError: (err) => {
+                toast.error(err.message)
+            },
+        }
+    )
     const formd = useForm<z.infer<typeof SchemaUser>>({
         resolver: zodResolver(SchemaUser),
         defaultValues: {
+            name: dataUser?.name ?? '',
+            lastName: dataUser?.lastName ?? '',
             email: [{ type: 'Gmail', direction: '', password: '' }],
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
+            gender: dataUser?.gender ? 'Masculino' : 'Femenino',
+            post: dataUser?.post ?? '',
+            status: dataUser?.status ?? StatusUser.ACTIVE,
+            document: {
+                type:
+                    (dataUser?.document.type as keyof typeof typedocument) ??
+                    'Dni',
+                number: dataUser?.document.number ?? '',
+            },
+            areaId: dataUser?.area?.id && String(dataUser?.area?.id),
+            deviceId: dataUser?.device?.id && String(dataUser?.device?.id),
         },
     })
-    const { setValue } = formd
 
     const CREATEUSER = useMutation({
         mutationFn: async (datos: z.infer<typeof SchemaUser>) => {
@@ -77,18 +113,9 @@ export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
         },
     })
     function Submit(data: z.infer<typeof SchemaUser>) {
+        if (dataUser) return UPDATEUSER(data)
         CREATEUSER.mutate(data)
     }
-    useEffect(() => {
-        if (dataUser) {
-            setValue('name', dataUser.name)
-            setValue('lastName', dataUser.lastName)
-            // setValue('document.type', dataUser.document.type as typedocument)
-            setValue('document.number', dataUser.document.number)
-
-            setValue('areaId', dataUser?.area?.id)
-        }
-    }, [dataUser, setValue])
     return (
         <Form {...formd}>
             <form
@@ -285,7 +312,23 @@ export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
                 </div>
 
                 <AlertDialogFooter className="mt-5">
-                    <Button type="submit">Crear Usuarios</Button>
+                    {dataUser ? (
+                        <Button
+                            type="submit"
+                            disabled={PENDINGUPDATE}
+                            variant="destructive"
+                        >
+                            {PENDINGUPDATE ? 'Actualizando...' : 'Actualizar'}
+                        </Button>
+                    ) : (
+                        <Button
+                            type="submit"
+                            disabled={CREATEUSER.isPending}
+                            variant="default"
+                        >
+                            {CREATEUSER.isPending ? 'Creando...' : 'Crear'}
+                        </Button>
+                    )}
                     <AlertDialogCancel asChild>
                         <Button variant={'ghost'}>Cancelar</Button>
                     </AlertDialogCancel>

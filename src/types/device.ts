@@ -7,7 +7,7 @@ export interface device {
     nickName: string
     status: deviceStatus
     codeDevice: string
-    anydesk: {
+    anydesk?: {
         id: string
         password?: string
     }
