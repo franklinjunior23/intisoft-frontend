@@ -68,3 +68,20 @@
         @apply bg-background text-foreground;
     }
 }
+.richtext-outline {
+    outline: none !important;
+}
+
+.tiptap {
+    max-width: fit-content;
+    max-width: 900px;
+    height: 60dvh;
+    padding: 10px;
+    border: none;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(148, 148, 148) transparent;
+    &:focus {
+        outline: none;
+    }
+}

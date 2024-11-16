@@ -1,18 +1,18 @@
 import { TooltipDelay } from '@/components/ui/tooltip-delay'
 import { Truncate } from '@/helper/truncate-text'
 import { Folder as FolderType } from '@/types/knowledge'
-import { ChevronDown, ChevronRight, Folder, PlusCircle } from 'lucide-react'
+import { ChevronDown, ChevronRight, Folder } from 'lucide-react'
 import { useState } from 'react'
 import { MenuList } from './menu-list'
 import DocumentItem from './document-item'
 import {
     ContextMenu,
     ContextMenuContent,
-    ContextMenuItem,
     ContextMenuTrigger,
 } from '@/components/ui/context-menu'
 import { FolderAdd } from './options/folder-add'
 import { DeleteFolder } from './options/folder-delete'
+import { DocumentAdd } from './options/document-add'
 
 type FileItemProps = {
     name: string
@@ -53,19 +53,7 @@ export default function FileItem({ id, name, folder }: FileItemProps) {
                 </ContextMenuTrigger>
                 <ContextMenuContent>
                     <FolderAdd setisOpenMenu={setisOpenMenu} id={id} />
-                    <ContextMenuItem
-                        asChild
-                        onClick={(e) => {
-                            e.preventDefault()
-
-                            console.log('Document')
-                        }}
-                    >
-                        <div className="flex gap-2 items-center">
-                            <PlusCircle className="h-4 w-4" />
-                            Documento
-                        </div>
-                    </ContextMenuItem>
+                    <DocumentAdd setisOpenMenu={setisOpenMenu} id={id} />
                     <DeleteFolder id={id} setisOpenMenu={setisOpenMenu} />
                 </ContextMenuContent>
             </ContextMenu>

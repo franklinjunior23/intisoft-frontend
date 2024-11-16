@@ -75,3 +75,22 @@ export function Time_year(dateInput: Date | string) {
 
     return `${dia}/${mes}/${año}`
 }
+
+export function Time_day(dateInput: Date | string, timeZone: string = 'America/Lima') {
+    // Convertir el string a un objeto Date si es necesario
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+
+    // Convertir la fecha a la zona horaria deseada utilizando toLocaleString
+    return date.toLocaleString('es-ES', {
+        timeZone: timeZone,
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true, // Para usar formato de 12 horas (AM/PM)
+    });
+}
+
+
