@@ -18,6 +18,7 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import AddBranch from './_components/add-branch'
 import VisiteTech from './_components/add-visit-tech'
+import TicketBranch from './ticket/ticket'
 
 export function PageCompanie() {
     const { data, isLoading } = BranchsGet()
@@ -33,7 +34,7 @@ export function PageCompanie() {
                     <li>Razon Social : {data?.data.businessName}</li>
                     <li>Ubicacion : {data?.data.place}</li>
                 </ul>
-                <footer className="mt-2 flex justify-between items-end">
+                <footer className="mt-2 md:flex justify-between items-end">
                     <div>
                         <Input
                             value={FilterBranch}
@@ -47,6 +48,7 @@ export function PageCompanie() {
                         </Badge>
                         <AddBranch />
                         <VisiteTech />
+                        <TicketBranch />
                     </div>
                 </footer>
             </header>

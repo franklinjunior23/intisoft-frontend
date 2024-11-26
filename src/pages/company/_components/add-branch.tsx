@@ -13,7 +13,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { LocalStorageKeys } from '@/constants/localstorage-keys'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { PlusCircle } from 'lucide-react'
@@ -85,7 +84,7 @@ export default function AddBranch() {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button size={'icon'} className="ml-2">
+                <Button size={'sm'} className="ml-2">
                     <PlusCircle className="w-4 h-4" />
                 </Button>
             </PopoverTrigger>

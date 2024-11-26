@@ -13,6 +13,7 @@ export function PageBranch() {
     const { branch } = LocalStorageState()
     const path = pathname.split('/')[3]
 
+    const { setArea } = useStateArea()
     useEffect(() => {
         async function GetAreas() {
             const { data } = await InstanceAxios.get(
@@ -23,8 +24,6 @@ export function PageBranch() {
         GetAreas()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [branch])
-
-    const { setArea } = useStateArea()
 
     return (
         <div>

@@ -9,7 +9,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
-import FormVisit from './visit-tech/form'
 import SectionVisit from './use-section-visit'
 
 export default function VisiteTech() {
@@ -21,8 +20,10 @@ export default function VisiteTech() {
                     onClick={() => {
                         setStateDialog(true)
                     }}
+                    size="sm"
+                    className="flex gap-2"
                 >
-                    <PlusCircle className="mr-2 size-4" /> Visita Tecnica
+                    <PlusCircle className="size-4" /> Visita Tecnica
                 </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="md:max-w-[900px]">
