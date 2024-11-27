@@ -197,38 +197,6 @@ export function FormDevice({
         }
     }, [dataDevice, setValue])
 
-    // const SaveData = useCallback(() => {
-    //     const currentData = JSON.stringify(getValues())
-    //     localStorage.setItem(LocalStorageKeys.deviceStorage, currentData)
-    // }, [getValues])
-
-    // useEffect(() => {
-    //     const savedData = localStorage.getItem(LocalStorageKeys.deviceStorage)
-    //     if (savedData) {
-    //         const parsedData: FormData = JSON.parse(savedData)
-    //         reset()
-
-    //         for (const [key, value] of Object.entries(parsedData)) {
-    //             setValue(key as keyof FormData, value)
-    //         }
-    //     }
-    // }, [setValue, reset])
-
-    // useEffect(() => {
-    //     const handleBeforeUnload = () => {
-    //         const data = getValues()
-    //         if (data.information.type) {
-    //             SaveData()
-    //         }
-    //     }
-
-    //     window.addEventListener('beforeunload', handleBeforeUnload)
-
-    //     // Cleanup
-    //     return () => {
-    //         window.removeEventListener('beforeunload', handleBeforeUnload)
-    //     }
-    // }, [getValues, SaveData])
     useEffect(() => {
         if (stateDialog) {
             const savedData = localStorage.getItem(
@@ -458,15 +426,11 @@ export function FormDevice({
                                             >
                                                 <Calendar
                                                     mode="single"
+                                                    captionLayout="dropdown-buttons"
                                                     selected={field.value}
                                                     onSelect={field.onChange}
-                                                    disabled={(date) =>
-                                                        date > new Date() ||
-                                                        date <
-                                                            new Date(
-                                                                '1900-01-01'
-                                                            )
-                                                    }
+                                                    fromYear={1960}
+                                                    toYear={new Date().getFullYear()}
                                                 />
                                             </PopoverContent>
                                         </Popover>

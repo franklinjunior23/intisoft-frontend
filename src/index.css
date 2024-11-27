@@ -85,3 +85,16 @@
         outline: none;
     }
 }
+.calendar-year-custom {
+    .rdp-button_reset[name='previous-month'],
+    .rdp-button_reset[name='next-month'] {
+        display: none;
+    }
+    .rdp-caption_dropdowns {
+        @apply grid;
+    }
+}
+
+.rdp-vhidden {
+    @apply hidden;
+}

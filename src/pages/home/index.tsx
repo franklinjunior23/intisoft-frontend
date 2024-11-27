@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Calendar } from '@/components/ui/calendar'
 import { CompanySlider } from './_components/companies-slider'
 import { AuditList } from './_components/item-audit'
+import { CalendarYear } from '@/components/ui/calendar-year'
 
 function PageHome() {
     const [date, setDate] = useState<Date | undefined>(new Date())
@@ -17,6 +18,7 @@ function PageHome() {
                     onSelect={setDate}
                     className=" border rounded-xl w-fit mt-4"
                 />
+                <CalendarYear />
             </div>
 
             <div className="md:w-[27%]">

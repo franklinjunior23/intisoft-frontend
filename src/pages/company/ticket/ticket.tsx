@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
-import FormTicket from './form-ticket'
 
 export default function TicketBranch() {
     const [StateDialog, setStateDialog] = useState<boolean>(false)
@@ -38,7 +37,7 @@ export default function TicketBranch() {
                         para la sucursal seleccionada en el sistema.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <FormTicket CloseDialog={Close} />
+                {/* <FormTicket CloseDialog={Close} /> */}
                 <FooterDialog />
             </AlertDialogContent>
         </AlertDialog>

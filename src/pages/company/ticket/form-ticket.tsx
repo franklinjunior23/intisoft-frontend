@@ -28,8 +28,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { Link } from 'react-router-dom'
 import { PriorityTicket, TypeIncidences } from './data/priority.data'
+import { StatusTicket } from './data/status.data'
 
 type FormTicketType = {
     CloseDialog: () => void
@@ -54,7 +54,7 @@ export default function FormTicket({ CloseDialog }: FormTicketType) {
             >
                 <main className="flex gap-4">
                     <section>
-                        <div className="flex gap-1 ">
+                        <div className="grid grid-cols-2 gap-1 ">
                             <FormField
                                 name="problem"
                                 control={control}
@@ -84,7 +84,7 @@ export default function FormTicket({ CloseDialog }: FormTicketType) {
                                     <FormControl>
                                         <Textarea
                                             placeholder="Descripcion del problema"
-                                            className="resize-none"
+                                            className="resize-none h-[150px]"
                                             {...field}
                                         />
                                     </FormControl>
@@ -92,7 +92,7 @@ export default function FormTicket({ CloseDialog }: FormTicketType) {
                                 </FormItem>
                             )}
                         />
-                        <div className="w-full p-10 border mt-2">
+                        <div className="w-full p-2   border mt-2 h-[60px]">
                             Archivos Adjuntos
                         </div>
                     </section>
@@ -215,6 +215,88 @@ export default function FormTicket({ CloseDialog }: FormTicketType) {
                                             placeholder="Categoria presentado"
                                         />
                                     </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={control}
+                            name="status"
+                            defaultValue={StatusTicket.IN_PROGRESS}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Estado</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Estado del ticket" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {Object.keys(StatusTicket).map(
+                                                (item) => (
+                                                    <SelectItem
+                                                        key={item}
+                                                        value={
+                                                            StatusTicket[item]
+                                                        }
+                                                    >
+                                                        {StatusTicket[item]}
+                                                    </SelectItem>
+                                                )
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={control}
+                            name="datePrograming"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col gap-2.5">
+                                    <FormLabel>Fecha de Programación</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={'outline'}
+                                                    className={cn(
+                                                        'w-[240px] pl-3  text-left font-normal',
+                                                        !field.value &&
+                                                            'text-muted-foreground'
+                                                    )}
+                                                >
+                                                    {field.value ? (
+                                                        format(
+                                                            field.value,
+                                                            'PPP'
+                                                        )
+                                                    ) : (
+                                                        <span>Pick a date</span>
+                                                    )}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="w-auto p-0"
+                                            align="start"
+                                        >
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+
                                     <FormMessage />
                                 </FormItem>
                             )}

@@ -1,11 +1,19 @@
 'use client'
 
 import * as React from 'react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
-import { DayPicker } from 'react-day-picker'
+import { DayPicker, DropdownProps } from 'react-day-picker'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from './select'
+import { ScrollArea } from './scroll-area'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -52,7 +60,7 @@ function Calendar({
                     'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
                 day_today: 'bg-accent text-accent-foreground',
                 day_outside:
-                    'day-outside text-muted-foreground opacity-50  aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
+                    'day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground',
                 day_disabled: 'text-muted-foreground opacity-50',
                 day_range_middle:
                     'aria-selected:bg-accent aria-selected:text-accent-foreground',
@@ -60,8 +68,63 @@ function Calendar({
                 ...classNames,
             }}
             components={{
-                IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
-                IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
+                Dropdown: ({
+                    value,
+                    onChange,
+                    children,
+                    ...props
+                }: DropdownProps) => {
+                    const options = React.Children.toArray(
+                        children
+                    ) as React.ReactElement<
+                        React.HTMLProps<HTMLOptionElement>
+                    >[]
+                    const selected = options.find(
+                        (child) => child.props.value === value
+                    )
+                    const handleChange = (value: string) => {
+                        const changeEvent = {
+                            target: { value },
+                        } as React.ChangeEvent<HTMLSelectElement>
+                        onChange?.(changeEvent)
+                    }
+                    return (
+                        <Select
+                            value={value?.toString()}
+                            onValueChange={(value) => {
+                                handleChange(value)
+                            }}
+                            
+                        >
+                            <SelectTrigger className="pr-1.5 focus:ring-0 mt-1 w-[140px]">
+                                <SelectValue>
+                                    {selected?.props?.children}
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent position="popper" >
+                                <ScrollArea className="h-80">
+                                    {options.map((option, id: number) => (
+                                        <SelectItem
+                                            key={`${option.props.value}-${id}`}
+                                            value={
+                                                option.props.value?.toString() ??
+                                                ''
+                                            }
+                                        >
+                                            {option.props.children}
+                                        </SelectItem>
+                                    ))}
+                                </ScrollArea>
+                            </SelectContent>
+                        </Select>
+                    )
+                },
+                IconLeft: ({ ...props }) => (
+                    <ChevronLeftIcon className="h-4 w-4" />
+                ),
+                IconRight: ({ ...props }) => (
+                    <ChevronRightIcon className="h-4 w-4" />
+                ),
             }}
             {...props}
         />

@@ -2,6 +2,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Control } from "react-hook-form"
 import { BranchsGet } from "../action/company.service"
+import { Skeleton } from "@/components/ui/skeleton"
 
 
 type SelectBranchType = {

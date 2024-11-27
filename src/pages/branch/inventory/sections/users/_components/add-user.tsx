@@ -81,7 +81,16 @@ export function FormUser({ CloseDialog, dataUser }: FormUserCreate) {
         defaultValues: {
             name: dataUser?.name ?? '',
             lastName: dataUser?.lastName ?? '',
-            email: [{ type: 'Gmail', direction: '', password: '' }],
+            email: dataUser?.email.map((mail) => ({
+                type: mail.type,
+                direction: mail?.direction,
+                password: mail?.password,
+            })) ?? [
+                {
+                    type: 'Gmail',
+                    direction: '',
+                },
+            ],
             branchId: localStorage.getItem(LocalStorageKeys.branch)!,
             gender: dataUser?.gender ? 'Masculino' : 'Femenino',
             post: dataUser?.post ?? '',
