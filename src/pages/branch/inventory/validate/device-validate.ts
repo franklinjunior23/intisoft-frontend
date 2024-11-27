@@ -113,7 +113,7 @@ export const SchemaDevice = z
         nickName: z.string(),
         codeDevice: z.string().optional(),
         status: z.nativeEnum(deviceStatus),
-        dateCreated: z.date().optional(),
+        dateCreated: z.date().optional().or(z.string().optional()),
         information: z.object({
             type: z.nativeEnum(deviceType),
             typeDevice: z.string(),

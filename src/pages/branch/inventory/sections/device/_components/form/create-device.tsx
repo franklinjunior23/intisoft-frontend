@@ -87,7 +87,7 @@ export function FormDevice({
                 model: dataDevice?.information.model,
             },
             dateCreated: dataDevice?.dateCreated
-                ? new Date(dataDevice.dateCreated)
+                ? format(new Date(dataDevice.dateCreated), 'PPP')
                 : new Date(),
             areaId: dataDevice?.area?.id ? String(dataDevice.area.id) : '',
             userId: dataDevice?.user?.id ? String(dataDevice?.user?.id) : '',
